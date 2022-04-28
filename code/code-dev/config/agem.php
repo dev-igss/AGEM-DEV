@@ -1,6 +1,6 @@
 <?php 
     return [ 
-        'name' => 'AGEM DEV',
+        'name' => 'AGEM',
         'default_password' => 'Igss.2022'
     ] 
 ?> 

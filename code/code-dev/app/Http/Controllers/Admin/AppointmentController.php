@@ -61,7 +61,7 @@ class AppointmentController extends Controller
 
             $idpatient = $request->input('patient_id');
             $type_exam = $request->input('type_exam');
-            $affiliation_p = Patient::select('affiliation')
+            $affiliation_p = Patient::select('affiliation', 'exp_prev')
                                 ->where('id', $idpatient)
                                 ->limit(1)
                                 ->get();
@@ -138,11 +138,20 @@ class AppointmentController extends Controller
                 endforeach;
             endif;
 
-            if($appointments_odls == '0'):
-                $appointments_type = '0';
-            else:
-                $appointments_type = '1';
-            endif;
+
+            foreach($affiliation_p as $ap):
+                $ep = $ap->exp_prev;
+
+                if($ep == '1'):
+                    $appointments_type = '1';
+                else:
+                    if($appointments_odls == '0'):
+                        $appointments_type = '0';
+                    else:
+                        $appointments_type = '1';
+                    endif;
+                endif;
+            endforeach;
 
             DB::beginTransaction();
 

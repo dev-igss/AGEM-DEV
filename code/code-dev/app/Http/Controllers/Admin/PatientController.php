@@ -43,14 +43,12 @@ class PatientController extends Controller
         $rules = [
             'affiliation' => 'required',
     		'name' => 'required',
-            'lastname' => 'required',
-            'unit_id' => 'required'
+            'lastname' => 'required'
     	];
     	$messagess = [
             'affiliation.required' => 'Se requiere el numero de afiliacion del paciente.',
     		'name.required' => 'Se requiere el nombre del paciente.',
-            'lastname.required' => 'Se requiere los apellidos del paciente.',
-            'unit_id.required' => 'Se requiere la unidad de afiliacion del paciente.'
+            'lastname.required' => 'Se requiere los apellidos del paciente.'
     	];
 
         $validator = Validator::make($request->all(), $rules, $messagess);
@@ -76,7 +74,8 @@ class PatientController extends Controller
 
             $p->name = e($request->input('name'));
             $p->lastname = e($request->input('lastname'));
-            $p->unit_id = e($request->input('unit_id'));
+            $p->unit_id = '1';
+            $p->exp_prev = e($request->input('exp_prev'));
             $p->age = $request->input('age');
             $p->birth = $request->input('birth'); 
             $p->gender = $request->input('gender');

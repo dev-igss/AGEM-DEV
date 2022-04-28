@@ -21,7 +21,7 @@
                     </div>
 
                     <div class="inside">   
-                        <label for="name" class="mtop16"><strong><sup style="color: red;">(*)</sup> Número de Afiliación: </strong></label>
+                        <label for="name"><strong><sup style="color: red;">(*)</sup> Número de Afiliación: </strong></label>
                         <div class="input-group">
                             <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
                             {!! Form::select('type_patient_edit', getTypePatient('list', null),$patient->type,['class'=>'form-select col-md-2', 'disabled' ]) !!}
@@ -105,7 +105,7 @@
                     </div>
 
                     <div class="inside"> 
-                        <label for="name" class="mtop16"><strong>Genero:</strong></label>
+                        <label for="name"><strong>Genero:</strong></label>
                         <div class="input-group">
                             <span class="input-group-text" id="basic-addon1"><i class="fas fa-layer-group"></i></span>
                             {!! Form::select('gender', getGenderPatient('list', null),$patient->gender,['class'=>'form-select']) !!}
@@ -140,7 +140,8 @@
                     </div>
 
                     <div class="inside"> 
-                        <label for="ibm" class="mtop16"><strong>Numero RX:</strong> @foreach($code_rx as $crx) {{ $crx->code }} @endforeach</label>
+                        
+                        <label for="ibm" ><strong>Numero RX:</strong> @foreach($code_rx as $crx) {{ $crx->code }} @endforeach</label>
                         <div class="input-group">
                             <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
                             {!! Form::text('num_rx', null, ['class'=>'form-control', 'id' => 'pnum_rx']) !!} 
