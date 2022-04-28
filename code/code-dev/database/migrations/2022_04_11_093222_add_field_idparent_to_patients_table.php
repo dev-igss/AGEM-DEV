@@ -14,7 +14,7 @@ class AddFieldIdparentToPatientsTable extends Migration
     public function up()
     {
         Schema::table('patients', function (Blueprint $table) {
-            //
+            $table->integer('affiliation_idparent')->after('affiliation_principal')->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class AddFieldIdparentToPatientsTable extends Migration
     public function down()
     {
         Schema::table('patients', function (Blueprint $table) {
-            $table->integer('affiliation_idparent')->after('affiliation_principal')->nullable();
+            
         });
     }
 }

@@ -70,8 +70,7 @@ class PatientController extends Controller
                     $p->affiliation_principal = $request->input('af_prin');
                 endif;
             endif;
-
-
+            $p->type = $request->input('type_patient');
             $p->name = e($request->input('name'));
             $p->lastname = e($request->input('lastname'));
             $p->unit_id = '1';
