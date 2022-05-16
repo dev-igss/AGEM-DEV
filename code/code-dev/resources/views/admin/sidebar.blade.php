@@ -50,7 +50,7 @@
 
             @if(kvfj(Auth::user()->permissions, 'patient_list'))
                 <li>
-                    <a href="{{ url('/admin/pacientes') }}" class="lk-patient_list lk-patient_add lk-patient_edit lk-patient_history_exam"><i class="fas fa-users"></i> Pacientes</a>
+                    <a href="{{ url('/admin/pacientes/a') }}" class="lk-patient_list lk-patient_add lk-patient_edit lk-patient_history_exam"><i class="fas fa-users"></i> Pacientes</a>
                 </li>
             @endif
 

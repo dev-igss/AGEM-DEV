@@ -17,9 +17,128 @@ class PatientController extends Controller
         $this->middleware('Permissions');
     }
 
-    public function getHome(){
+    public function getHome($filtrado){
 
-        $patients = Patient::with(['parent'])->get();            
+        switch ($filtrado) {
+
+            case 'todos':
+                $patients = Patient::with(['parent'])->orderBy('name', 'Asc')->get();  
+            break;
+    
+            case 'a':
+                $patients = Patient::with(['parent'])->where('lastname','LIKE',$filtrado.'%')->orderBy('lastname', 'Asc')->get();
+            break;
+
+            case 'b':
+                $patients = Patient::with(['parent'])->where('lastname','LIKE',$filtrado.'%')->orderBy('lastname', 'Asc')->get();
+            break;
+    
+            case 'c':
+                $patients = Patient::with(['parent'])->where('lastname','LIKE',$filtrado.'%')->orderBy('lastname', 'Asc')->get();
+            break;
+
+            case 'ch':
+                $patients = Patient::with(['parent'])->where('lastname','LIKE',$filtrado.'%')->orderBy('lastname', 'Asc')->get();
+            break;
+    
+            case 'd':
+                $patients = Patient::with(['parent'])->where('lastname','LIKE',$filtrado.'%')->orderBy('lastname', 'Asc')->get();
+            break;
+    
+            case 'e':
+                $patients = Patient::with(['parent'])->where('lastname','LIKE',$filtrado.'%')->orderBy('lastname', 'Asc')->get();
+            break;
+    
+            case 'f':
+                $patients = Patient::with(['parent'])->where('lastname','LIKE',$filtrado.'%')->orderBy('lastname', 'Asc')->get();
+            break;
+    
+            case 'g':
+                $patients = Patient::with(['parent'])->where('lastname','LIKE',$filtrado.'%')->orderBy('lastname', 'Asc')->get();
+            break;
+    
+            case 'h':
+                $patients = Patient::with(['parent'])->where('lastname','LIKE',$filtrado.'%')->orderBy('lastname', 'Asc')->get();
+            break;
+    
+            case 'i':
+                $patients = Patient::with(['parent'])->where('lastname','LIKE',$filtrado.'%')->orderBy('lastname', 'Asc')->get();
+            break;
+    
+            case 'j':
+                $patients = Patient::with(['parent'])->where('lastname','LIKE',$filtrado.'%')->orderBy('lastname', 'Asc')->get();
+            break;
+    
+            case 'k':
+                $patients = Patient::with(['parent'])->where('lastname','LIKE',$filtrado.'%')->orderBy('lastname', 'Asc')->get();
+            break;
+    
+            case 'l':
+                $patients = Patient::with(['parent'])->where('lastname','LIKE',$filtrado.'%')->orderBy('lastname', 'Asc')->get();
+            break;
+    
+            case 'm':
+                $patients = Patient::with(['parent'])->where('lastname','LIKE',$filtrado.'%')->orderBy('lastname', 'Asc')->get();
+            break;
+    
+            case 'n':
+                $patients = Patient::with(['parent'])->where('lastname','LIKE',$filtrado.'%')->orderBy('lastname', 'Asc')->get();
+            break;
+    
+            case 'ñ':
+                $patients = Patient::with(['parent'])->where('lastname','LIKE',$filtrado.'%')->orderBy('lastname', 'Asc')->get();
+            break;
+    
+            case 'o':
+                $patients = Patient::with(['parent'])->where('lastname','LIKE',$filtrado.'%')->orderBy('lastname', 'Asc')->get();
+            break;
+    
+            case 'p':
+                $patients = Patient::with(['parent'])->where('lastname','LIKE',$filtrado.'%')->orderBy('lastname', 'Asc')->get();
+            break;
+    
+            case 'q':
+                $patients = Patient::with(['parent'])->where('lastname','LIKE',$filtrado.'%')->orderBy('lastname', 'Asc')->get();
+            break;
+    
+            case 'r':
+                $patients = Patient::with(['parent'])->where('lastname','LIKE',$filtrado.'%')->orderBy('lastname', 'Asc')->get();
+            break;
+    
+            case 's':
+                $patients = Patient::with(['parent'])->where('lastname','LIKE',$filtrado.'%')->orderBy('lastname', 'Asc')->get();
+            break;
+    
+            case 't':
+                $patients = Patient::with(['parent'])->where('lastname','LIKE',$filtrado.'%')->orderBy('lastname', 'Asc')->get();
+            break;
+    
+            case 'u':
+                $patients = Patient::with(['parent'])->where('lastname','LIKE',$filtrado.'%')->orderBy('lastname', 'Asc')->get();
+            break;
+    
+            case 'v':
+                $patients = Patient::with(['parent'])->where('lastname','LIKE',$filtrado.'%')->orderBy('lastname', 'Asc')->get();
+            break;
+    
+            case 'w':
+                $patients = Patient::with(['parent'])->where('lastname','LIKE',$filtrado.'%')->orderBy('lastname', 'Asc')->get();
+            break;
+    
+            case 'x':
+                $patients = Patient::with(['parent'])->where('lastname','LIKE',$filtrado.'%')->orderBy('lastname', 'Asc')->get();
+            break;
+    
+            case 'y':
+                $patients = Patient::with(['parent'])->where('lastname','LIKE',$filtrado.'%')->orderBy('lastname', 'Asc')->get();
+            break;
+    
+            case 'z':
+                $patients = Patient::with(['parent'])->where('lastname','LIKE',$filtrado.'%')->orderBy('lastname', 'Asc')->get();
+            break;
+        }
+
+                  
         //return $patients;
         $data = [
             'patients' => $patients
