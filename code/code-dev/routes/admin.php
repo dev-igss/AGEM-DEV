@@ -81,8 +81,6 @@
         Route::get('/usuario/cuenta/informacion','Admin\UserController@getAccountInfo')->name('user_info');
         Route::post('/usuario/cuenta/cambiar/contrasena','Admin\UserController@postAccountChangePassword')->name('user_change_password');       
         
-        //Imports & Exports
-        Route::post('/importar_pacientes','Admin\PatientController@importPatients')->name('patient_add');
         
         //Request Ajax 
         Route::get('/agem/api/load/add/patient/{code}/{exam}', 'Admin\ApiController@getPatient');

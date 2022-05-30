@@ -133,26 +133,5 @@
         </div>
     </div>
 
-    <div class="container-fluid mtop16">
-        <div class="panel shadow">
-
-            <div class="header"> 
-                <h2 class="title"><i class="fas fa-users"></i> <strong>Importación de Pacientes</strong></h2>
-            </div>
-
-            <div class="inside">               
-                {!! Form::open(['url' => '/admin/importar_pacientes', 'files' => true]) !!}
-                    <div class="form-group mb-4">
-                        <div class="custom-file text-left">
-                            <input type="file" name="file" class="custom-file-input" id="customFile">
-                            <label class="custom-file-label" for="customFile">Choose file</label>
-                        </div>
-                    </div>
-                    {!! Form::submit('Importar', ['class'=>'btn btn-success mtop16']) !!}
-                {!! Form::close() !!}
-                
-            </div>
-
-        </div>
-    </div>
+    
 @endsection
