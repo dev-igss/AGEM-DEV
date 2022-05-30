@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Http\Models\Patient, App\Http\Models\Unit, App\Http\Models\CodePatient, App\Http\Models\Appointment, App\Http\Models\DetailAppointment, App\Http\Models\Bitacora;
-use Maatwebsite\Excel\Facades\Excel;
+
 use App\Imports\importPatients;
 use Validator, Str, Config, Auth, Session, DB, Response;
 
@@ -647,8 +647,5 @@ class PatientController extends Controller
         return view('admin.patients.history_code', $data);
     }
 
-    public function importPatients(Request $request){
-        Excel::import(new ImportPatients, $request->file('file')->store('files'));
-        return redirect()->back();
-    }
+
 }
