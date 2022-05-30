@@ -181,7 +181,12 @@
                 'title' => 'Modulo de Dashboard',
                 'keys' => [
                     'dashboard' => 'Puede ver el dashboard.',
-                    'dashboard_small_stats' => 'Puede ver las estadísticas rápidas.'
+                    'dashboard_small_stats' => 'Puede ver las estadísticas rápidas del día.',
+                    'dashboard_small_tec_ser' => 'Puede ver las estadísticas por tecnicos y servicios.',
+                    'dashboard_small_stats_month' => 'Puede ver las estadísticas rápidas del mes.',
+                    'dashboard_prod_tecnicos_stats' => 'Puede ver las estadísticas de productividad de todos los tecnicos por area.',
+                    'dashboard_prod_individual_stats' => 'Puede ver las estadísticas de productividad individual por area.',
+                    'dashboard_appointments_tec' => 'Puede ver las citas atendidas por el tecnico.'
                 ]
             ],
 
@@ -271,10 +276,12 @@
                 'title' => 'Modulo de Citas',
                 'keys' => [
                     'appointment_list' => 'Puede ver el listado de citas.',
+                    'appointment_calendar' => 'Puede ver el calendario de citas.',
                     'appointment_add' => 'Puede agendar citas.',
                     'appointment_materials' => 'Puede reagendar citas a pacientes.',
                     'appointment_reschedule' => 'Puede ver el listado de materiales utilizados.',
-                    'appointment_patients_status' => 'Puede marcar como presentes o ausentes a los pacientes.'                 
+                    'appointment_patients_status' => 'Puede marcar como presentes o ausentes a los pacientes.',
+                    'appointment_setting' => 'Puede modificar la configuración de las citas de todo el servicio.'                 
                           
                 ]
             ]

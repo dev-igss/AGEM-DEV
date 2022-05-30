@@ -21,8 +21,8 @@ function delete_object(e){
     var area = this.getAttribute('data-area');
     var action = this.getAttribute('data-action');
     var path = this.getAttribute('data-path');
-    //var url = base + '/agem/public/' + path + '/' + object + '/' + action;
-    var url = base + path + '/' + object + '/' + action;
+    var url = base + '/agem/public/' + path + '/' + object + '/' + action;
+    //var url = base + path + '/' + object + '/' + action;
     var title, text, icon, material, cant, tecnico, comment, request;
 
     if(action == "comentario"){
@@ -141,8 +141,8 @@ function delete_object(e){
                 });    
                 select = document.getElementById('swal-input2');
                 select.innerHTML = "";
-                //var url1 = base + '/agem/public/agem/api/load/name/study/all/'+area;
-                var url1 = base + 'admin/agem/api/load/studies/'+exam; 
+                var url1 = base + '/agem/public/agem/api/load/name/study/all/'+area;
+                //var url1 = base + '/admin/agem/api/load/studies/'+exam; 
                 http.open('GET', url1, true);
                 http.setRequestHeader('X-CSRF-TOKEN', csrfToken);
                 http.send();
@@ -194,8 +194,8 @@ function delete_object(e){
             }
         }).then((result) =>{
             if (result.isConfirmed) {
-                //var url = base + '/agem/public/agem/api/load/name/study/'+idstudyappointment;
-                var url = base + '/agem/api/load/name/study/'+idstudyappointment;
+                var url = base + '/agem/public/agem/api/load/name/study/'+idstudyappointment;
+                //var url = base + '/agem/api/load/name/study/'+idstudyappointment;
                 http.open('GET', url, true);
                 http.setRequestHeader('X-CSRF-TOKEN', csrfToken);
                 http.send();

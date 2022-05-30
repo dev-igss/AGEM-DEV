@@ -48,9 +48,9 @@
         Route::get('/citas', 'Admin\AppointmentController@getHome')->name('appointment_list');
         Route::get('/cita/agregar', 'Admin\AppointmentController@getAppointmentAdd')->name('appointment_add');        
         Route::post('/cita/agregar', 'Admin\AppointmentController@postAppointmentAdd')->name('appointment_add');
-        Route::get('/cita/calendario', 'Admin\AppointmentController@getCalendar')->name('appointment_add'); 
-        Route::get('/cita/calendario/rx', 'Admin\AppointmentController@getCalendarRx')->name('appointment_add'); 
-        Route::get('/cita/calendario/umd', 'Admin\AppointmentController@getCalendarUmd')->name('appointment_add'); 
+        Route::get('/cita/calendario', 'Admin\AppointmentController@getCalendar')->name('appointment_calendar'); 
+        Route::get('/cita/calendario/rx', 'Admin\AppointmentController@getCalendarRx')->name('appointment_calendar'); 
+        Route::get('/cita/calendario/umd', 'Admin\AppointmentController@getCalendarUmd')->name('appointment_calendar'); 
         Route::get('/cita/{id}/materiales', 'Admin\AppointmentController@getAppointmentMaterials')->name('appointment_materials');
         Route::get('/cita/materiales/{id}/material_desechado', 'Admin\AppointmentController@getAppointmentMaterialsDiscarded')->name('appointment_materials');
         Route::get('/cita/{id}/registro_materiales/{idstudy}/{idmaterial}/{amount}', 'Admin\AppointmentController@getAppointmentRegisterMaterials')->name('appointment_materials');
@@ -59,9 +59,15 @@
         Route::get('/cita/{id}/paciente_presente/{status}', 'Admin\AppointmentController@getAppointmentPatientsStatus')->name('appointment_patients_status');
         Route::get('/cita/{id}/paciente_ausente/{status}', 'Admin\AppointmentController@getAppointmentPatientsStatus')->name('appointment_patients_status');
         Route::get('/cita/{id}/informe_al_patrono', 'Admin\AppointmentController@getAppointmentInforme')->name('appointment_materials');
+        Route::get('/cita/configuracion', 'Admin\AppointmentController@getSetting')->name('appointment_setting');
+        Route::post('/cita/configuracion', 'Admin\AppointmentController@postSetting')->name('appointment_setting');
 
         //Bitacoras
-        Route::get('/bitacoras','Admin\BitacoraController@getBitacora')->name('bitacoras');        
+        Route::get('/bitacoras','Admin\BitacoraController@getBitacora')->name('bitacoras'); 
+
+        //Reportes
+        Route::get('/reportes','Admin\DashboardController@getStaticsDates')->name('bitacoras');      
+        Route::post('/reporte/filtrado/fechas','Admin\DashboardController@postStaticsBetweenDates')->name('bitacoras');  
 
         //Users        
         Route::get('/usuarios', 'Admin\UserController@getUsers')->name('user_list');
@@ -73,7 +79,10 @@
         Route::get('/usuario/{id}/permisos', 'Admin\UserController@getUserPermissions')->name('user_permissions');
         Route::post('/usuario/{id}/permisos', 'Admin\UserController@postUserPermissions')->name('user_permissions');
         Route::get('/usuario/cuenta/informacion','Admin\UserController@getAccountInfo')->name('user_info');
-        Route::post('/usuario/cuenta/cambiar/contrasena','Admin\UserController@postAccountChangePassword')->name('user_change_password');         
+        Route::post('/usuario/cuenta/cambiar/contrasena','Admin\UserController@postAccountChangePassword')->name('user_change_password');       
+        
+        //Imports & Exports
+        Route::post('/importar_pacientes','Admin\PatientController@importPatients')->name('patient_add');
         
         //Request Ajax 
         Route::get('/agem/api/load/add/patient/{code}/{exam}', 'Admin\ApiController@getPatient');

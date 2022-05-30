@@ -24,6 +24,12 @@
                 </li>
             @endif
 
+            @if(kvfj(Auth::user()->permissions, 'dashboard'))
+                <li>
+                    <a href="{{ url('/admin/reportes') }}" class="lk-dashboard"><i class="fas fa-tachometer-alt"></i> Reportes</a>
+                </li>
+            @endif
+
             @if(kvfj(Auth::user()->permissions, 'units'))
                 <li>
                     <a href="{{ url('admin/unidades') }}" class="lk-units lk-unit_add lk-unit_edit lk-unit_delete"><i class="fas fa-hospital-user"></i> Unidades</a>
@@ -56,11 +62,9 @@
 
             @if(kvfj(Auth::user()->permissions, 'appointment_list'))
                 <li>
-                    <a href="{{ url('/admin/citas') }}" class="lk-appointment_list lk-appointment_add lk-appointment_materials "><i class="fas fa-calendar-alt"></i> Citas</a>
+                    <a href="{{ url('/admin/citas') }}" class="lk-appointment_list lk-appointment_add lk-appointment_materials lk-appointment_setting lk-appointment_calendar "><i class="fas fa-calendar-alt"></i> Citas</a>
                 </li>
             @endif
-
-            
 
             @if(kvfj(Auth::user()->permissions, 'user_list'))
                 <li>

@@ -50,12 +50,12 @@
         <br><br>
         <table width="100%"  style=" margin-top:60px; text-align: center; font-size: 12px;">
             <tr>
-                <th ROWSPAN="2">Llegó</th>
+                <th ROWSPAN="2" width="60px">Llegó</th>
                 <th>Clinica</th>
                 <th>Farmacia</th>
                 <th>Laboratorio</th>
-                <th>Rayos X</th>
-                <th></th>
+                <th width="100px">Rayos X</th>
+                <th width="100px"></th>
             </tr>
             <tr>
                 <th></th>
@@ -73,26 +73,26 @@
                 <th></th>
             </tr>
             <tr>
-                <th>Nombre R.</th>
+                <th height="36px">Nombre R.</th>
                 <th></th>
                 <th></th>
                 <th></th>
                 <th>{{ Auth::user()->name }} {{ Auth::user()->lastname }}</th>
-                <th></th>
+                <th ></th>
             </tr>
             <tr>
                 <th>Firma R.</th>
                 <th></th>
                 <th></th>
                 <th></th>
-                <th></th>
+                <th height="36px"></th>
                 <th></th>
             </tr>
         </table>
 
         
         <span>
-            <h3>Observaciones: </h3>
+            <h3>Observaciones: </h3> Paciente se presento para la realización de estudios programados en el area de radiologia.
         </span>
     </body>
 

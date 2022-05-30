@@ -31,6 +31,14 @@ class Appointment extends Model
         return $this->hasOne(Studie::class,'id','study_id');
     }
 
+    public function details(){
+        return $this->hasOne(MaterialAppointment::class,'idappointment', 'id');
+    }
+
+    public function materials(){
+        return $this->hasOne(MaterialAppointment::class,'idappointment', 'id');
+    }
+
     public function tecnico1(){
         return $this->hasOne(User::class,'id','ibm_tecnico_1');
     }

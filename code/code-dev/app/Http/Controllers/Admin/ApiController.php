@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 use App\Http\Models\Patient, App\Http\Models\CodePatient, App\Http\Models\Appointment, App\Http\Models\DetailAppointment, App\Http\Models\Service, App\Http\Models\Studie;
 use Carbon\Carbon, DB;
@@ -89,12 +90,14 @@ class ApiController extends Controller
             if(count($code_last) == 0):
                 
                 $data = [
-                    'patient' => $patient
+                    'patient' => $patient,
+                    'exam' => $exam
                 ];
             else:
                 $data = [
                     'patient' => $patient,
-                    'code_last' => $code_last
+                    'code_last' => $code_last,
+                    'exam' => $exam
                 ];
             endif;
 
@@ -109,7 +112,8 @@ class ApiController extends Controller
                 $data = [
                     'patient' => $patient,
                     'appointment_last' => $appoinment_last,
-                    'detalles' => $detalles
+                    'detalles' => $detalles,
+                    'exam' => $exam
                 ];
             else:
                 
@@ -118,7 +122,8 @@ class ApiController extends Controller
                     'patient' => $patient,
                     'code_last' => $code_last,
                     'appointment_last' => $appoinment_last,
-                    'detalles' => $detalles
+                    'detalles' => $detalles,
+                    'exam' => $exam
                 ];
             endif;
         endif;
@@ -195,7 +200,7 @@ class ApiController extends Controller
                 ->join('patients', 'appointments.patient_id', '=', 'patients.id')
                 ->join('schedule', 'appointments.schedule_id', '=', 'schedule.id')
                 ->select(DB::raw('CONCAT(patients.lastname,  \', \' , patients.name) AS title'), DB::raw('CONCAT(appointments.date,  \' \' , schedule.hour_in) AS start'), DB::raw('CONCAT(appointments.date,  \' \' , schedule.hour_out) AS end'), DB::raw('appointments.area AS area'), DB::raw('schedule.type AS type'))
-                ->get();
+                ->get(); 
            
         
         return $appointments;
@@ -240,6 +245,16 @@ class ApiController extends Controller
         ];
 
         return response()->json($data);
+    }
+
+    public function getPruebaConsulta($mes, $year){
+        
+        $response = Http::get('http://10.11.0.45/api/medicosRayosX.php', [
+            'month' => $mes,
+            'year' => $year,
+        ]);
+
+        return $response->json();
     }
     
 }

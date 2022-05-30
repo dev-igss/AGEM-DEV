@@ -58,28 +58,28 @@ document.addEventListener('DOMContentLoaded', function(){
             document.getElementById("div_manual_code_rx").style.display = "block";
         });
     }
-
+    
     if(btn_manual_code_usg){
         btn_manual_code_usg.addEventListener('click', function(e){
             e.preventDefault();
             document.getElementById("div_manual_code_usg").style.display = "block";
         });
     }
-
+    
     if(btn_manual_code_mmo){
         btn_manual_code_mmo.addEventListener('click', function(e){
             e.preventDefault();
             document.getElementById("div_manual_code_mmo").style.display = "block";
         });
     }
-
+    
     if(btn_manual_code_dmo){
         btn_manual_code_dmo.addEventListener('click', function(e){
             e.preventDefault();
             document.getElementById("div_manual_code_dmo").style.display = "block";
         });
     }
-
+    
     if(btn_update_affiliation){
         btn_update_affiliation.addEventListener('click', function(e){
             e.preventDefault();
@@ -87,11 +87,14 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     }
 
-    getDisponibilidadHorario();
    
     if(route == "equipment_add"){
         setServiceToEquipment();
         setEnvironmentToEquipment();
+    }
+
+    if(route == "appointment_add"){
+        getDisponibilidadHorario();
     }
 
     document.getElementsByClassName('lk-'+route)[0].classList.add('active');
@@ -169,6 +172,36 @@ document.addEventListener('DOMContentLoaded', function(){
         }
     });
 
+    $('#table-modules2').DataTable({ 
+        "paging": true,
+        "lengthChange": true,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+        language: {
+            "decimal": "",
+            "emptyTable": "No hay registros",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ Registros",
+            "infoEmpty": "Mostrando 0 to 0 of 0 Registros",
+            "infoFiltered": "(Filtrado de _MAX_ total registros)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrar _MENU_ Registros",
+            "loadingRecords": "Cargando...",
+            "processing": "Procesando...",
+            "search": "Buscar:",
+            "zeroRecords": "Sin resultados encontrados",
+            "paginate": {
+                "first": "Primero",
+                "last": "Ultimo",
+                "next": "Siguiente",
+                "previous": "Anterior"
+            }
+        }
+    });
+
     $("#pidservice").select2({
         placeholder: "Seleccione una Opción",
         allowClear: true
@@ -211,8 +244,8 @@ function delete_object(e){
     var idstudy = this.getAttribute('data-study');
     var exam = this.getAttribute('data-exam');
     //console.log(exam);
-    //var url = base + '/agem/public/' + path + '/' + object + '/' + action;
-    var url = base + '/' + path + '/' + object + '/' + action;
+    var url = base + '/agem/public/' + path + '/' + object + '/' + action;
+    //var url = base + '/' + path + '/' + object + '/' + action;
     var title, text, icon, date, status, material, amount, comment;
     var today = new Date();
     var dd = today.getDate();
@@ -230,7 +263,7 @@ function delete_object(e){
     today = yyyy + '-' + mm + '-' + dd;
     //console.log(today);
 
-    if(action == "reprogramar"){
+    if(action == "reprogramar"){ 
         title = '¿Esta seguro de '+'"Reprogramar"'+' esta cita?';
         text = "Recuerde que esta acción no se podra realizar nuevamente.";
         icon = "warning";
@@ -399,17 +432,18 @@ function delete_object(e){
 }
 
 function setInfoAddPatient(){
-    var exam = document.getElementById('exam_b').value;
-    var affiliation_b = document.getElementById('affiliation_b').value;
-    //var url = base + '/agem/public/admin/agem/api/load/add/patient/'+affiliation_b+'/'+exam;
-    var url = base + '/admin/agem/api/load/add/patient/'+affiliation_b+'/'+exam;
-    var patient_id = document.getElementById('ppatient_id');
-    var name = document.getElementById('ppatient_name');
-    var lastname = document.getElementById('ppatient_lastname');
-    var contact = document.getElementById('ppatient_contact');
-    var code_last = document.getElementById('pcodelast');
-    var date_al = document.getElementById('pdate');
-    var numexp_al = document.getElementById('pnumexp'); 
+    var exam = document.getElementById('exam_b').value;    
+    var affiliation_b = document.getElementById('affiliationp').value;
+    var url = base + '/agem/public/admin/agem/api/load/add/patient/'+affiliation_b+'/'+exam;
+    //var url = base + '/admin/agem/api/load/add/patient/'+affiliation_b+'/'+exam;
+    var patient_id = document.getElementById('patient_id');
+    var name = document.getElementById('namep');
+    var lastname = document.getElementById('lastnamep');
+    var contact = document.getElementById('contactp');
+    var code_last = document.getElementById('numexpp');
+    var date_al = document.getElementById('date_al');
+    var numexp_al = document.getElementById('numexp_al'); 
+    var type_exam = document.getElementById('type_examp');
 
     http.open('GET', url, true);
     http.setRequestHeader('X-CSRF-TOKEN', csrfToken);
@@ -418,12 +452,13 @@ function setInfoAddPatient(){
         if(this.readyState == 4 && this.status == 200){
             var data = this.responseText;
             data = JSON.parse(data);
+            type_exam.value = data.exam;
             if('patient' in data){
                 patient_id.value = data.patient[0].id;
                 name.value = data.patient[0].name;
                 lastname.value = data.patient[0].lastname;
                 contact.value = data.patient[0].contact;
-            }            
+            }           
             if('code_last' in data){
                 code_last.value = data.code_last[0].code;
             }
@@ -442,8 +477,8 @@ function setInfoAddPatient(){
             var studies_actual = document.getElementById('studies_actual').value;
             select = document.getElementById('studies');
             select.innerHTML = "";
-            //var url = base + '/agem/public/admin/agem/api/load/studies/'+exam;
-            var url = base + '/admin/agem/api/load/studies/'+exam;
+            var url = base + '/agem/public/admin/agem/api/load/studies/'+exam;
+            //var url = base + 'admin/agem/api/load/studies/'+exam;
             http.open('GET', url, true);
             http.setRequestHeader('X-CSRF-TOKEN', csrfToken);
             http.send();
@@ -470,8 +505,8 @@ function setInfoAddPatient(){
 
 function setGenerateCodeRx(){
     var nomenclatura = 'RX';
-    //var url = base + '/agem/public/admin/agem/api/load/generate/code/'+nomenclatura;
-    var url = base + '/admin/agem/api/load/generate/code/'+nomenclatura;
+    var url = base + '/agem/public/admin/agem/api/load/generate/code/'+nomenclatura;
+    //var url = base + '/admin/agem/api/load/generate/code/'+nomenclatura;
     var num_rx = document.getElementById('pnum_rx');
     var nomenclature = document.getElementById('pnum_rx_nom');
     var correlative = document.getElementById('pnum_rx_cor');
@@ -494,8 +529,8 @@ function setGenerateCodeRx(){
 
 function setGenerateCodeUsg(){
     var nomenclatura = 'USG';
-    //var url = base + '/agem/public/admin/agem/api/load/generate/code/'+nomenclatura;
-    var url = base + '/admin/agem/api/load/generate/code/'+nomenclatura;
+    var url = base + '/agem/public/admin/agem/api/load/generate/code/'+nomenclatura;
+    //var url = base + '/admin/agem/api/load/generate/code/'+nomenclatura;
     var num_usg = document.getElementById('pnum_usg');
     var nomenclature = document.getElementById('pnum_usg_nom');
     var correlative = document.getElementById('pnum_usg_cor');
@@ -518,8 +553,8 @@ function setGenerateCodeUsg(){
 
 function setGenerateCodeMmo(){
     var nomenclatura = 'MMO';
-    //var url = base + '/agem/public/admin/agem/api/load/generate/code/'+nomenclatura;
-    var url = base + '/admin/agem/api/load/generate/code/'+nomenclatura;
+    var url = base + '/agem/public/admin/agem/api/load/generate/code/'+nomenclatura;
+    //var url = base + '/admin/agem/api/load/generate/code/'+nomenclatura;
     var num_mmo = document.getElementById('pnum_mmo');
     var nomenclature = document.getElementById('pnum_mmo_nom');
     var correlative = document.getElementById('pnum_mmo_cor');
@@ -542,8 +577,8 @@ function setGenerateCodeMmo(){
 
 function setGenerateCodeDmo(){
     var nomenclatura = 'DMO';
-    //var url = base + '/agem/public/admin/agem/api/load/generate/code/'+nomenclatura;
-    var url = base + '/admin/agem/api/load/generate/code/'+nomenclatura;
+    var url = base + '/agem/public/admin/agem/api/load/generate/code/'+nomenclatura;
+    //var url = base + '/admin/agem/api/load/generate/code/'+nomenclatura;
     var num_dmo = document.getElementById('pnum_dmo');
     var nomenclature = document.getElementById('pnum_dmo_nom');
     var correlative = document.getElementById('pnum_dmo_cor');
@@ -565,9 +600,10 @@ function setGenerateCodeDmo(){
 }
 
 function getDisponibilidadHorario(){
-    
+    var citas_configuradas = document.getElementById('citas_configuradas').value;
     var inputdate = document.getElementById('date_new_app');
     var options=$('#schedules option').clone();
+    
 
     $(inputdate).change(function(){
 
@@ -578,8 +614,8 @@ function getDisponibilidadHorario(){
         var year = fecha[0]+fecha[1]+fecha[2]+fecha[3];
         var exam = document.getElementById('exam_b').value;
         
-        //var url = base + '/agem/public/admin/agem/api/load/schedules/'+fecha+'/'+exam;
-        var url = base + '/admin/agem/api/load/schedules/'+fecha+'/'+exam;
+        var url = base + '/agem/public/admin/agem/api/load/schedules/'+fecha+'/'+exam;
+        //var url = base + '/admin/agem/api/load/schedules/'+fecha+'/'+exam;
         http.open('GET', url, true);
         http.setRequestHeader('X-CSRF-TOKEN', csrfToken);
         http.send();
@@ -590,9 +626,10 @@ function getDisponibilidadHorario(){
                 //console.log(data);   
                 if(data.length > 0){
                     data.forEach( function(schedule, index){
-                        if(schedule.total >= 2){
+                        
+                        if(schedule.total >= citas_configuradas){
                             for(i=1; i <= 18; i++){
-                                //console.log(i);
+                                //console.log(citas_configuradas);
                                 if(schedule.schedule_id == i){
                                     $('#schedules option[value="'+schedule.schedule_id+'"]').remove();    
                                 }

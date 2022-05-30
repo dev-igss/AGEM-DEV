@@ -14,7 +14,7 @@
             <div class="header">
                 <h2 class="title"><i class="fas fa-calendar-alt"></i><strong> Listado de Citas</strong> </h2>
                 <ul>
-                    @if(kvfj(Auth::user()->permissions, 'patient_add')) 
+                    @if(kvfj(Auth::user()->permissions, 'appointment_calendar')) 
                         <ul>
                             <li>
                                 <div class="btn-group">
@@ -32,11 +32,17 @@
                             </li>
                         </ul>
                     @endif
-                    @if(kvfj(Auth::user()->permissions, 'patient_add'))
+                    @if(kvfj(Auth::user()->permissions, 'appointment_setting'))
+                        <li>
+                            <a href="{{ url('/admin/cita/configuracion') }}" ><i class="fa fa-cogs"></i> Configuración de Citas</a>
+                        </li>
+                    @endif
+                    @if(kvfj(Auth::user()->permissions, 'appointment_add'))
                         <li>
                             <a href="{{ url('/admin/cita/agregar') }}" ><i class="fas fa-plus-circle"></i> Agendar Cita</a>
                         </li>
                     @endif
+                    
                 </ul>
             </div>
 

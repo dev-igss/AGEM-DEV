@@ -17,61 +17,6 @@
             <div class="col-md-4 d-flex">
                 <div class="panel shadow">
                     <!-- Modal -->
-                    <div class="modal" id="modelId" tabindex="-1">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header" style="background-color:#256B92; color:#fff; text-align:center;">
-                                    <h5 class="modal-title">Busqueda de Paciente</h5>
-                                </div>
-
-                                <div class="modal-body">
-
-                                    <div class="col-md-12">
-                                        <label for="name"> <strong>Ingrese Afiliacion Para Buscar: </strong></label>
-                                        <div class="input-group">
-                                            <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
-                                            {!! Form::text('affiliation_b', null, ['class'=>'form-control', 'id'=> 'affiliation_b']) !!}
-                                            {!! Form::select('type', getExamB('list', null),0,['class'=>'form-select', 'id'=> 'exam_b' ]) !!}
-                                            <button type="button" id="btn_add_patient_search" class="btn btn-warning">
-                                                <i class="fas fa-search"></i> Buscar
-                                            </button>
-                                        </div>
-                                    </div>
-
-
-
-                                    {!! Form::hidden('ppatient_id', null, ['class'=>'form-control', 'id'=> 'ppatient_id' ]) !!}
-
-
-                                    <div class="col-md-12 mtop16">
-                                        <div class="form-group">
-                                            <label for="no_doc"> <strong> Nombre: </strong></label>
-                                            {!! Form::text('ppatient_name', null, ['class'=>'form-control', 'id'=> 'ppatient_name']) !!}
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-12 mtop16">
-                                        <div class="form-group">
-                                            <label for="no_doc"> <strong> Apellidos: </strong></label>
-                                            {!! Form::text('ppatient_lastname', null, ['class'=>'form-control', 'id'=> 'ppatient_lastname']) !!}
-                                        </div>
-                                    </div>
-
-                                    {!! Form::hidden('ppatient_contact', null, ['class'=>'form-control', 'id'=> 'ppatient_contact' ]) !!}
-                                    {!! Form::hidden('pcodelast', null, ['class'=>'form-control', 'id'=> 'pcodelast' ]) !!}
-                                    {!! Form::hidden('pdate', null, ['class'=>'form-control', 'id'=> 'pdate' ]) !!}
-                                    {!! Form::hidden('pnumexp', null, ['class'=>'form-control', 'id'=> 'pnumexp' ]) !!}
-                                    {!! Form::hidden('pstudie', null, ['class'=>'form-control', 'id'=> 'pstudie' ]) !!}
-                                    {!! Form::hidden('pservice', null, ['class'=>'form-control', 'id'=> 'pservice' ]) !!}
-                                </div>
-
-                                <div class="modal-footer">
-                                    <button type="button" id="bt_closeModal" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
-                                    <button type="button" id="bt_add" class="btn btn-primary">Seleccionar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                     <div class="header">
                         <h2 class="title"><i class="fas fa-cogs"></i><strong> Información Paciente</strong></h2>
@@ -80,13 +25,15 @@
                     <div class="inside">   
                         
                         {!! Form::hidden('patient_id', null, ['class'=>'form-control', 'id'=> 'patient_id']) !!}
-                        {!! Form::hidden('type_exam', null, ['class'=>'form-control', 'id'=> 'type_exam']) !!}
+                        {!! Form::hidden('type_exam', null, ['class'=>'form-control', 'id'=> 'type_examp']) !!}
 
                         <label for="name" ><strong> Numero de Afiliacion: </strong></label>
                         <div class="input-group">
                             <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
-                            {!! Form::text('affiliationp', null, ['class'=>'form-control', 'id'=>'affiliationp', 'readonly']) !!}
-                            <a href="#" class="btn btn-sm btn-info " id="bt_search"><i class="fas fa-search"></i> Buscar</a>
+                            {!! Form::text('affiliationp', null, ['class'=>'form-control', 'id'=>'affiliationp']) !!}
+                            {!! Form::select('type', getExamB('list', null),0,['class'=>'form-select col-md-4', 'id'=> 'exam_b' ]) !!}
+                            <a href="#" class="btn btn-sm btn-info " id="btn_add_patient_search" data-toogle="tooltrip" data-placement="top" title="Buscar" ><i class="fas fa-search"></i> </a>
+                            <a href="{{ url('/admin/cita/agregar') }}" class="btn btn-sm btn-warning " data-toogle="tooltrip" data-placement="top" title="Limpiar" ><i class="fa fa-refresh"></i> </a>
                         </div>
 
                         <label for="name" class="mtop16"><strong> Nombre:</strong></label>
@@ -186,6 +133,7 @@
                             {!! Form::date('date', null, ['class'=>'form-control', 'id' => 'date_new_app']) !!}
                         </div>
 
+                        {!! Form::hidden('citas_configuradas', Config::get('agem.citas_configuradas'), ['id' => 'citas_configuradas']) !!}
                         <label for="name" class="mtop16"><strong>Horarios de Atención:</strong></label>
                         <div class="input-group">
                             <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
@@ -314,33 +262,7 @@
             });
         });
 
-        function agregar(){
-            idpatient=$("#ppatient_id").val();
-            examen = $("#exam_b").val();
-            affiliation = $("#affiliation_b").val();
-            name=$("#ppatient_name").val();
-            lastname=$("#ppatient_lastname").val();
-            contact=$("#ppatient_contact").val();
-            code_last = $("#pcodelast").val();
-            date_last = $("#pdate").val();
-            numexp_last = $("#pnumexp").val();
-            studie_last = $("#pstudie").val();
-            service_last = $("#pservice").val();
 
-            $("#patient_id").val(idpatient);
-            $("#type_exam").val(examen);
-            $("#affiliationp").val(affiliation);
-            $("#namep").val(name);
-            $("#lastnamep").val(lastname);
-            $("#contactp").val(contact);
-            $("#numexpp").val(code_last);
-            $("#date_al").val(date_last);
-            $("#numexp_al").val(numexp_last);
-            $("#studie_al").val(studie_last);
-            $("#service_al").val(service_last);
-            $('#modelId').modal("hide");
-            limpiar();
-        }
 
         function limpiar(){
             $("#ppatient_id").val("");
