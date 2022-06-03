@@ -181,8 +181,8 @@ class DashboardController extends Controller
                         ->get();
 
         $tecnicos = User::select('id', DB::raw('CONCAT(name,  \' \' , lastname) AS nombre'), 'ibm')
-                        ->where('role', '3')
-                        ->orderBy('id', 'ASC')
+                        ->whereIn('role', [3,5])
+                        ->orderBy('ibm', 'ASC')
                         ->get();
 
         /* ESTADISTICA DE CITAS POR SERVICIO */
@@ -353,8 +353,8 @@ class DashboardController extends Controller
                             ->count();
 
         $tecnicos = User::select('id', DB::raw('CONCAT(name,  \' \' , lastname) AS nombre'), 'ibm')
-                            ->where('role', '3')
-                            ->orderBy('id', 'ASC')
+                            ->whereIn('role', [3,5])
+                            ->orderBy('ibm', 'ASC')
                             ->get();
                             
         $citas_tec_g_rx = DB::table('appointments')
