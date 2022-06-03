@@ -66,8 +66,8 @@
         Route::get('/bitacoras','Admin\BitacoraController@getBitacora')->name('bitacoras'); 
 
         //Reportes
-        Route::get('/reportes','Admin\DashboardController@getStaticsDates')->name('bitacoras');      
-        Route::post('/reporte/filtrado/fechas','Admin\DashboardController@postStaticsBetweenDates')->name('bitacoras');  
+        Route::get('/reportes','Admin\DashboardController@getStaticsDates')->name('dashboard');      
+        Route::post('/reporte/filtrado/fechas','Admin\DashboardController@postStaticsBetweenDates')->name('dashboard');  
 
         //Users        
         Route::get('/usuarios', 'Admin\UserController@getUsers')->name('user_list');

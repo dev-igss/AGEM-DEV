@@ -17,7 +17,7 @@
                 </div>
 
                 <div class="inside">
-                    {!! Form::open(['url' => '/admin/user/cuenta/cambiar/contrasena']) !!}
+                    {!! Form::open(['url' => '/admin/usuario/cuenta/cambiar/contrasena']) !!}
                         <div class="row">
                             <div class="col-md-12">
                                 <label for="name"><strong>Contraseña Actual:</strong></label>
