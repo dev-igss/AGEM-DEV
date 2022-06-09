@@ -145,11 +145,23 @@ class ApiController extends Controller
                                 ->count();
         $nomenclature = $code;
         
-        $correlative = $codes_ant +'1';
+        if($nomenclature == 'RX' && $date->year == '2022'):
+            $correlative = $codes_ant +'1';
+        elseif($nomenclature == 'USG' && $date->year == '2022'):
+            $correlative = $codes_ant +'3031';
+        elseif($nomenclature == 'MMO' && $date->year == '2022'):
+            $correlative = $codes_ant +'1';
+        elseif($nomenclature == 'DMO' && $date->year == '2022'):
+            $correlative = $codes_ant +'1';
+        else:
+            $correlative = $codes_ant +'2';
+        endif;
+        
+        
         $year = $date->format('Y');
         $year_short = $date->format('y');
         
-        if($codes_ant < 10):
+        if($correlative < 10):
             $code_new = $nomenclature.'0'.$correlative.'-'.$year_short;
         else:
             $code_new = $nomenclature.$correlative.'-'.$year_short;

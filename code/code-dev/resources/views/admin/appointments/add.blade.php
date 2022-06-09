@@ -51,7 +51,7 @@
                         <label for="name" class="mtop16"><strong> Contacto:</strong></label>
                         <div class="input-group">
                             <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
-                            {!! Form::text('contactp', null, ['class'=>'form-control', 'id'=>'contactp', 'readonly']) !!}
+                            {!! Form::text('contactp', null, ['class'=>'form-control', 'id'=>'contactp']) !!}
                         </div>
 
                         <label for="name" class="mtop16"><strong> Numero de Expediente Actual:</strong></label>

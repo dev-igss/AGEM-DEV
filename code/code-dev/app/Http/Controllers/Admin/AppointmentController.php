@@ -307,6 +307,10 @@ class AppointmentController extends Controller
             $appointment->status = '0';    
             $appointment->save();      
 
+            $patient_aux = Patient::findOrFail($idpatient);
+            $patient_aux->contact =  $request->get('contactp');
+            $patient_aux->save();
+
             $idservice = $request->get('idservice');          
             $idstudy = $request->get('idstudy');
             $comment = $request->get('comment');
@@ -475,7 +479,7 @@ class AppointmentController extends Controller
         $patient = Patient::where('id', $appointment->patient_id)
                         ->limit(1)
                         ->get();
-        
+        $hora = Carbon::now()->addHours(1)->format('H:i');
         switch($appointment->area):
             case '0':
                 $nomen = 'RX';
@@ -518,7 +522,7 @@ class AppointmentController extends Controller
                 $appointment->num_study = $num_exp;                    
 
                 $appointment->status = $status;
-                $hora = Carbon::now()->format('H:i');
+                
                 $appointment->check_in = $hora;
             endif; 
         else:

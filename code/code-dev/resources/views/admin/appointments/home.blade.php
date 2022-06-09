@@ -71,11 +71,11 @@
                                             @endif
                                         @endif
 
-                                        @if(kvfj(Auth::user()->permissions, 'appointment_reschedule'))
+                                        <!--@if(kvfj(Auth::user()->permissions, 'appointment_reschedule'))
                                             @if($a->status == '0')
                                             <a href="{{ url('/admin/cita/'.$a->id.'/materiales') }}"  title="Constancia de Cita" ><i class="fa fa-file-text"></i></a>
                                             @endif
-                                        @endif
+                                        @endif -->
 
                                         @if(kvfj(Auth::user()->permissions, 'appointment_patients_status'))
                                             @if($a->status == '0' || $a->status == '4')

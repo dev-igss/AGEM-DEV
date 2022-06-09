@@ -54,8 +54,8 @@
                 <th>Clinica</th>
                 <th>Farmacia</th>
                 <th>Laboratorio</th>
-                <th width="100px">Rayos X</th>
-                <th width="100px"></th>
+                <th width="180px">Rayos X</th>
+                <th width="60px"></th>
             </tr>
             <tr>
                 <th></th>
