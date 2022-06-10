@@ -27,12 +27,39 @@ class PatientDayController extends Controller
         return view('patients_day.home_rx', $data);
     }
 
-    public function getPatientDayUmd(){
+    public function getPatientDayUmd($filtrado){
         $today = Carbon::now()->format('Y-m-d');
-        $appointments = Appointment::where('date',$today)
+
+        switch($filtrado):
+            case 'todas':
+                $appointments = Appointment::where('date',$today)
                     ->whereIn('area', ['2', '3', '4'])                   
                     ->where('status', '1')
                     ->get();
+            break;
+
+            case 'usg':
+                $appointments = Appointment::where('date',$today)
+                    ->where('area', '2')                   
+                    ->where('status', '1')
+                    ->get();
+            break;
+
+            case 'mmo':
+                $appointments = Appointment::where('date',$today)
+                    ->where('area', '3')                   
+                    ->where('status', '1')
+                    ->get();
+            break;
+
+            case 'dmo':
+                $appointments = Appointment::where('date',$today)
+                    ->where('area', '4')                   
+                    ->where('status', '1')
+                    ->get();
+            break;
+        endswitch;
+        
         $detalles = DetailAppointment::all();
        
         $date = Carbon::now()->format('d-m-Y');
@@ -80,7 +107,6 @@ class PatientDayController extends Controller
 
         $cita = Appointment::findOrFail($request->get('appointmentid'));
         $cita->status = '3';
-        
         $hora = Carbon::now()->addHours(1)->addMinutes(10)->format('H:i');
         $cita->check_out = $hora;
         $cita->ibm_tecnico_1 = $id_tec1;

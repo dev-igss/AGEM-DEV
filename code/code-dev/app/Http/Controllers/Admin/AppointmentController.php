@@ -31,7 +31,7 @@ class AppointmentController extends Controller
     public function getAppointmentAdd(){
         $services = Service::where('type','1')
             ->where('unit_id', '1')
-            ->get();
+            ->get(); 
         $studies = Studie::pluck('name','id');
         $detalles = DetailAppointment::all();
         $schedules = Schedule::all();
@@ -58,294 +58,531 @@ class AppointmentController extends Controller
     	if($validator->fails()):
     		return back()->withErrors($validator)->with('messages', 'Se ha producido un error.')->with('typealert', 'danger');
         else: 
-            $area_temp = NULL;
-            $idpatient = $request->input('patient_id');            
-            $type_exam = $request->input('type_exam');
-           
-            $affiliation_p = Patient::select('affiliation', 'exp_prev')
-                                ->where('id', $idpatient)
-                                ->limit(1)
-                                ->get();
+            if(!is_null($request->input('patient_id'))):
+                $area_temp = NULL;
+                $idpatient = $request->input('patient_id');            
+                $type_exam = $request->input('type_exam');
+            
+                $affiliation_p = Patient::select('affiliation', 'exp_prev')
+                                    ->where('id', $idpatient)
+                                    ->limit(1)
+                                    ->get();
 
-            switch($type_exam):
+                switch($type_exam):
 
-                case '0':
-                    $code_exp = CodePatient::select('code')
-                        ->where('patient_id', $idpatient)
-                        ->where('nomenclature', 'RX')
-                        ->where('status', '0')
-                        ->get();
-                    $area = '0';
-                    $appointments_odls = Appointment::where('patient_id', $idpatient)
-                                ->where('area',$area)
-                                ->count();
-                break;
+                    case '0':
+                        $code_exp = CodePatient::select('code')
+                            ->where('patient_id', $idpatient)
+                            ->where('nomenclature', 'RX')
+                            ->where('status', '0')
+                            ->get();
+                        $area = '0';
+                        $appointments_odls = Appointment::where('patient_id', $idpatient)
+                                    ->where('area',$area)
+                                    ->count();
+                    break;
 
-                case '1':
-                    $code_exp = CodePatient::select('code')
-                        ->where('patient_id', $idpatient)
-                        ->where('nomenclature', 'RX')
-                        ->where('status', '0')
-                        ->get();
-                    $area = '0';
-                    $area_temp = '1';
-                    $appointments_odls = Appointment::where('patient_id', $idpatient)
-                                ->where('area',$area)
-                                ->count();
-                break;
+                    case '1':
+                        $code_exp = CodePatient::select('code')
+                            ->where('patient_id', $idpatient)
+                            ->where('nomenclature', 'RX')
+                            ->where('status', '0')
+                            ->get();
+                        $area = '0';
+                        $area_temp = '1';
+                        $appointments_odls = Appointment::where('patient_id', $idpatient)
+                                    ->where('area',$area)
+                                    ->count();
+                    break;
 
-                case '2':
-                    $code_exp = CodePatient::select('code')
-                        ->where('patient_id', $idpatient)
-                        ->where('nomenclature', 'USG')
-                        ->where('status', '0')
-                        ->get();
-                    $area = '2';
-                    $appointments_odls = Appointment::where('patient_id', $idpatient)
-                                ->where('area',$area)
-                                ->count();
-                break;
+                    case '2':
+                        $code_exp = CodePatient::select('code')
+                            ->where('patient_id', $idpatient)
+                            ->where('nomenclature', 'USG')
+                            ->where('status', '0')
+                            ->get();
+                        $area = '2';
+                        $appointments_odls = Appointment::where('patient_id', $idpatient)
+                                    ->where('area',$area)
+                                    ->count();
+                    break;
 
-                case '3':
-                    $code_exp = CodePatient::select('code')
-                        ->where('patient_id', $idpatient)
-                        ->where('nomenclature', 'MMO')
-                        ->where('status', '0')
-                        ->get();
-                    $area = '3';
-                    $appointments_odls = Appointment::where('patient_id', $idpatient)
-                                ->where('area',$area)
-                                ->count();
-                break;
+                    case '3':
+                        $code_exp = CodePatient::select('code')
+                            ->where('patient_id', $idpatient)
+                            ->where('nomenclature', 'MMO')
+                            ->where('status', '0')
+                            ->get();
+                        $area = '3';
+                        $appointments_odls = Appointment::where('patient_id', $idpatient)
+                                    ->where('area',$area)
+                                    ->count();
+                    break;
 
-                case '4':
-                    $code_exp = CodePatient::select('code')
-                        ->where('patient_id', $idpatient)
-                        ->where('nomenclature', 'DMO')
-                        ->where('status', '0')
-                        ->get();
-                    $area = '4';
-                    $appointments_odls = Appointment::where('patient_id', $idpatient)
-                                ->where('area',$area)
-                                ->count();
-                break;
+                    case '4':
+                        $code_exp = CodePatient::select('code')
+                            ->where('patient_id', $idpatient)
+                            ->where('nomenclature', 'DMO')
+                            ->where('status', '0')
+                            ->get();
+                        $area = '4';
+                        $appointments_odls = Appointment::where('patient_id', $idpatient)
+                                    ->where('area',$area)
+                                    ->count();
+                    break;
 
-            endswitch;
+                endswitch;
 
-            if(count($code_exp) == 0):
-                $code_assig = "";
-            else:
-                foreach($code_exp as $ce):
-                    $code_assig = $ce->code;
-                endforeach;
-            endif;
-
-
-            foreach($affiliation_p as $ap):
-                $ep = $ap->exp_prev;
-
-                if($ep == '1'):
-                    $appointments_type = '1';
+                if(count($code_exp) == 0):
+                    $code_assig = "";
                 else:
-                    if($appointments_odls == '0'):
-                        $appointments_type = '0';
-                    else:
+                    foreach($code_exp as $ce):
+                        $code_assig = $ce->code;
+                    endforeach;
+                endif;
+
+
+                foreach($affiliation_p as $ap):
+                    $ep = $ap->exp_prev;
+
+                    if($ep == '1'):
                         $appointments_type = '1';
-                    endif;
-                endif;
-            endforeach;
-
-            DB::beginTransaction();
-
-            $servicio = Service::with(['parent'])->where('id', $request->get('idservice')[0])->get();
-
-            foreach($servicio as $ser):
-                $solicitante = $ser->parent->name;
-            endforeach;
-
-            $appointment = new Appointment;
-            $appointment->patient_id = $idpatient;
-            $appointment->date = $request->input('date');
-            if($request->input('schedule') != ""):
-                $appointment->schedule_id = $request->input('schedule');
-            else:
-                $appointment->schedule_id = $request->input('schedule1'); 
-            endif;
-
-            $ca = ControlAppointment::where('date', $appointment->date)->count();
-
-            if($ca == 0):
-                $control = new ControlAppointment;
-                $control->date = $request->input('date');
-                if($area == 0 ):
-                    $control->amount_rx = '1';
-                    if($area_temp != NULL):
-                        if($request->input('schedule') >= 1 && $request->input('schedule') <= 10):
-                            $control->amount_rx_special_am = '1';
+                    else:
+                        if($appointments_odls == '0'):
+                            $appointments_type = '0';
                         else:
-                            $control->amount_rx_special_pm = '1';
+                            $appointments_type = '1';
                         endif;
-                    endif;                    
-                elseif($area == 2):
-                    $doppler = Studie::findOrFail($request->get('idstudy'));                    
-                    foreach($doppler as $d):
-                        if($d->is_doppler == '1'):
-                            $control->amount_usg_doppler = '1';
-                            if($request->input('schedule') >= 1 && $request->input('schedule') <= 10):
-                                $c->amount_usg_doppler_am = '1';
-                            else:
-                                $c->amount_usg_doppler_pm = '1';
-                            endif;
-                        else:
-                            $control->amount_usg = '1';
-                        endif;                    
-                    endforeach;                              
-                elseif($area == 3):
-                    if($request->input('schedule') >= 1 && $request->input('schedule') <= 10):
-                        $control->amount_mmo_am = '1';
-                    else:
-                        $control->amount_mmo_pm = '1';
                     endif;
-                elseif($area == 4):
-                    if($request->input('schedule') >= 1 && $request->input('schedule') <= 10):
-                        $control->amount_dmo_am = '1';
-                    else:
-                        $control->amount_dmo_pm = '1';
-                    endif;
+                endforeach;
+
+                DB::beginTransaction();
+
+                $servicio = Service::with(['parent'])->where('id', $request->get('idservice')[0])->get();
+
+                foreach($servicio as $ser):
+                    $solicitante = $ser->parent->name;
+                endforeach;
+
+                $appointment = new Appointment;
+                $appointment->patient_id = $idpatient;
+                $appointment->date = $request->input('date');
+                if($request->input('schedule') != ""):
+                    $appointment->schedule_id = $request->input('schedule');
+                else:
+                    $appointment->schedule_id = '1'; 
                 endif;
-                $control->save();
-            else:
-                $ca1 = ControlAppointment::where('date' , $request->input('date'))->get();
-                foreach($ca1 as $c):
+
+                $ca = ControlAppointment::where('date', $appointment->date)->count();
+
+                if($ca == 0):
+                    $control = new ControlAppointment;
+                    $control->date = $request->input('date');
                     if($area == 0 ):
-                        $c->amount_rx = $c->amount_rx + 1;   
+                        $control->amount_rx = '1';
                         if($area_temp != NULL):
                             if($request->input('schedule') >= 1 && $request->input('schedule') <= 10):
-                                if($c->amount_rx_special_am == Config::get('agem.appo_rx_special_am')):
-                                    return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.') 
-                                        ->with('typealert', 'warning');                                
+                                $control->amount_rx_special_am = '1';
+                            else:
+                                $control->amount_rx_special_pm = '1';
+                            endif;
+                        endif;                    
+                    elseif($area == 2):
+                        $doppler = Studie::findOrFail($request->get('idstudy'));                    
+                        foreach($doppler as $d):
+                            if($d->is_doppler == '1'):
+                                $control->amount_usg_doppler = '1';
+                                if($request->input('schedule') >= 1 && $request->input('schedule') <= 10):
+                                    $c->amount_usg_doppler_am = '1';
                                 else:
-                                    $c->amount_rx_special_am = $c->amount_rx_special_am + 1;
+                                    $c->amount_usg_doppler_pm = '1';
                                 endif;
                             else:
-                                if($c->amount_rx_special_pm == Config::get('agem.appo_rx_special_pm')):
+                                $control->amount_usg = '1';
+                            endif;                    
+                        endforeach;                              
+                    elseif($area == 3):
+                        if($request->input('schedule') >= 1 && $request->input('schedule') <= 10):
+                            $control->amount_mmo_am = '1';
+                        else:
+                            $control->amount_mmo_pm = '1';
+                        endif;
+                    elseif($area == 4):
+                        if($request->input('schedule') >= 1 && $request->input('schedule') <= 10):
+                            $control->amount_dmo_am = '1';
+                        else:
+                            $control->amount_dmo_pm = '1';
+                        endif;
+                    endif;
+                    $control->save();
+                else:
+                    $ca1 = ControlAppointment::where('date' , $request->input('date'))->get();
+                    foreach($ca1 as $c):
+                        if($area == 0 ):
+                            $c->amount_rx = $c->amount_rx + 1;   
+                            if($area_temp != NULL):
+                                if($request->input('schedule') >= 1 && $request->input('schedule') <= 10):
+                                    if($c->amount_rx_special_am == Config::get('agem.appo_rx_special_am')):
+                                        return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.') 
+                                            ->with('typealert', 'warning');                                
+                                    else:
+                                        $c->amount_rx_special_am = $c->amount_rx_special_am + 1;
+                                    endif;
+                                else:
+                                    if($c->amount_rx_special_pm == Config::get('agem.appo_rx_special_pm')):
+                                        return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.')
+                                            ->with('typealert', 'warning');                                
+                                    else:
+                                        $c->amount_rx_special_pm = $c->amount_rx_special_pm + 1;
+                                    endif;
+                                endif;
+                            endif;     
+
+                        elseif($area == 2):
+                            if($c->amount_usg == 10 || $c->amount_usg_doppler == 4 ):
+                                return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.')
+                                        ->with('typealert', 'warning');
+                            else:
+                                $doppler = Studie::findOrFail($request->get('idstudy'));                    
+                                foreach($doppler as $d):
+                                    if($d->is_doppler == '1'):
+                                        $c->amount_usg_doppler = $c->amount_usg_doppler + 1;
+                                        if($request->input('schedule') >= 1 && $request->input('schedule') <= 10):
+                                            $c->amount_usg_doppler_am = $c->amount_usg_doppler_am + 1;
+                                        else:
+                                            $c->amount_usg_doppler_pm = $c->amount_usg_doppler_pm + 1;
+                                        endif;
+                                    else:
+                                        if($request->input('schedule') >= 1 && $request->input('schedule') <= 10):
+                                            $c->amount_usg_am = $c->amount_usg_am + 1;
+                                        else:
+                                            $c->amount_usg_pm = $c->amount_usg_pm + 1;
+                                        endif;
+                                    endif;                    
+                                endforeach;                            
+                            endif;                        
+                        elseif($area == 3):
+                            if($request->input('schedule') >= 1 && $request->input('schedule') <= 10):
+                                if($c->amount_mmo_am == Config::get('agem.appo_mmo_am')):
                                     return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.')
                                         ->with('typealert', 'warning');                                
                                 else:
-                                    $c->amount_rx_special_pm = $c->amount_rx_special_pm + 1;
+                                    $c->amount_mmo_am = $c->amount_mmo_am + 1;
                                 endif;
-                            endif;
-                        endif;     
+                            else:
+                                if($c->amount_mmo_pm == Config::get('agem.appo_mmo_pm')):
+                                    return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.')
+                                        ->with('typealert', 'warning');                                
+                                else:
+                                    $c->amount_mmo_pm = $c->amount_mmo_pm + 1;
+                                endif;
+                            endif;                        
+                        elseif($area == 4):
+                            if($request->input('schedule') >= 1 && $request->input('schedule') <= 10):
+                                if($c->amount_dmo_am == Config::get('agem.appo_dmo_am')):
+                                    return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.')
+                                        ->with('typealert', 'warning');                                
+                                else:
+                                    $c->amount_dmo_am = $c->amount_dmo_am + 1;
+                                endif;
+                            else:
+                                if($c->amount_dmo_pm == Config::get('agem.appo_dmo_pm')):
+                                    return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.')
+                                        ->with('typealert', 'warning');                                
+                                else:
+                                    $c->amount_dmo_pm = $c->amount_dmo_pm + 1;
+                                endif;
+                            endif;                        
+                        endif;
+                        $c->save();
+                    endforeach;
+                    
+                endif;          
 
-                    elseif($area == 2):
-                        if($c->amount_usg == 10 || $c->amount_usg_doppler == 4 ):
-                            return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.')
-                                    ->with('typealert', 'warning');
-                        else:
+                if($code_assig != NULL):
+                    $appointment->num_study = $code_assig;
+                endif;
+                $appointment->type = $appointments_type;
+                $appointment->area = $area;
+                $appointment->service = $solicitante;
+                $appointment->status = '0';    
+                $appointment->save();      
+
+                $patient_aux = Patient::findOrFail($idpatient);
+                $patient_aux->contact =  $request->get('contactp');
+                $patient_aux->save();
+
+                $idservice = $request->get('idservice');          
+                $idstudy = $request->get('idstudy');
+                $comment = $request->get('comment');
+
+                $cont=0;
+
+                while ($cont<count($idservice)) {
+                    $detalle = new DetailAppointment();
+                    $detalle->idappointment=$appointment->id;
+                    $detalle->idservice=$idservice[$cont];
+                    $detalle->idstudy=$idstudy[$cont];
+                    $detalle->comment=$comment[$cont];
+                    $detalle->save();
+                    $cont=$cont+1;
+                }
+
+                DB::commit();
+
+                if($appointment->save()):                 
+
+                    foreach($affiliation_p as $ap):
+                        $afp = $ap->affiliation;
+                    endforeach;
+
+                    $b = new Bitacora;
+                    $b->action = "Registro de cita para paciente con afiliación: ".$afp;
+                    $b->user_id = Auth::id();
+                    $b->save();
+
+                    return redirect('/admin/citas')->with('messages', '¡Cita agendada y guardada con exito!.')
+                        ->with('typealert', 'success');
+                endif;
+            else:
+                //return $request->all();
+
+                $patient_new = new Patient;
+                $patient_new->unit_id = '1';
+                $patient_new->exp_prev = '0';
+                $patient_new->type = $request->input('type_patient_new');
+                $patient_new->affiliation = e($request->input('affiliationp'));
+                $patient_new->name = e($request->input('name_new'));
+                $patient_new->lastname = e($request->input('lastname_new'));
+                $patient_new->gender = $request->input('gender_new');
+                $patient_new->age = e($request->input('age_new'));
+                $patient_new->contact = e($request->input('contact_new'));
+                
+                if($patient_new->save()):
+                    if($request->input('num_code_new') != ""):
+                        $cp = new CodePatient;
+                        $cp->patient_id = $patient_new->id;                                      
+                        $cp->nomenclature = $request->input('num_code_nom');
+                        $cp->correlative = $request->input('num_code_cor');
+                        $cp->year = $request->input('num_code_y');
+                        $cp->code = $request->input('num_code_new');
+                        $cp->status = '0';
+                        $cp->save();
+                    endif;
+
+                    $area_temp = NULL;
+                    $type_exam = $request->input('type');
+                    switch($type_exam):
+
+                        case '0':
+                            $area = '0';
+                        break;
+            
+                        case '1':
+                            $area = '0';
+                            $area_temp = '1';
+                        break;
+            
+                        case '2':
+                            $area = '2';
+                        break;
+            
+                        case '3':
+                            
+                            $area = '3';
+                        break;
+            
+                        case '4':
+
+                            $area = '4';
+                        break;
+            
+                    endswitch;
+
+                    DB::beginTransaction();
+
+                    $servicio = Service::with(['parent'])->where('id', $request->get('idservice')[0])->get();
+
+                    foreach($servicio as $ser):
+                        $solicitante = $ser->parent->name;
+                    endforeach;
+
+                    $appointment = new Appointment;
+                    $appointment->patient_id = $patient_new->id;
+                    $appointment->date = $request->input('date');
+                    if($request->input('schedule') != ""):
+                        $appointment->schedule_id = $request->input('schedule');
+                    else:
+                        $appointment->schedule_id = '1'; 
+                    endif;
+
+                    $ca = ControlAppointment::where('date', $appointment->date)->count();
+
+                    if($ca == 0):
+                        $control = new ControlAppointment;
+                        $control->date = $request->input('date');
+                        if($area == 0 ):
+                            $control->amount_rx = '1';
+                            if($area_temp != NULL):
+                                if($request->input('schedule') >= 1 && $request->input('schedule') <= 10):
+                                    $control->amount_rx_special_am = '1';
+                                else:
+                                    $control->amount_rx_special_pm = '1';
+                                endif;
+                            endif;                    
+                        elseif($area == 2):
                             $doppler = Studie::findOrFail($request->get('idstudy'));                    
                             foreach($doppler as $d):
                                 if($d->is_doppler == '1'):
-                                    $c->amount_usg_doppler = $c->amount_usg_doppler + 1;
+                                    $control->amount_usg_doppler = '1';
                                     if($request->input('schedule') >= 1 && $request->input('schedule') <= 10):
-                                        $c->amount_usg_doppler_am = $c->amount_usg_doppler_am + 1;
+                                        $c->amount_usg_doppler_am = '1';
                                     else:
-                                        $c->amount_usg_doppler_pm = $c->amount_usg_doppler_pm + 1;
+                                        $c->amount_usg_doppler_pm = '1';
                                     endif;
                                 else:
-                                    if($request->input('schedule') >= 1 && $request->input('schedule') <= 10):
-                                        $c->amount_usg_am = $c->amount_usg_am + 1;
-                                    else:
-                                        $c->amount_usg_pm = $c->amount_usg_pm + 1;
-                                    endif;
+                                    $control->amount_usg = '1';
                                 endif;                    
-                            endforeach;                            
-                        endif;                        
-                    elseif($area == 3):
-                        if($request->input('schedule') >= 1 && $request->input('schedule') <= 10):
-                            if($c->amount_mmo_am == Config::get('agem.appo_mmo_am')):
-                                return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.')
-                                    ->with('typealert', 'warning');                                
+                            endforeach;                              
+                        elseif($area == 3):
+                            if($request->input('schedule') >= 1 && $request->input('schedule') <= 10):
+                                $control->amount_mmo_am = '1';
                             else:
-                                $c->amount_mmo_am = $c->amount_mmo_am + 1;
+                                $control->amount_mmo_pm = '1';
                             endif;
-                        else:
-                            if($c->amount_mmo_pm == Config::get('agem.appo_mmo_pm')):
-                                return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.')
-                                    ->with('typealert', 'warning');                                
+                        elseif($area == 4):
+                            if($request->input('schedule') >= 1 && $request->input('schedule') <= 10):
+                                $control->amount_dmo_am = '1';
                             else:
-                                $c->amount_mmo_pm = $c->amount_mmo_pm + 1;
+                                $control->amount_dmo_pm = '1';
                             endif;
-                        endif;                        
-                    elseif($area == 4):
-                        if($request->input('schedule') >= 1 && $request->input('schedule') <= 10):
-                            if($c->amount_dmo_am == Config::get('agem.appo_dmo_am')):
-                                return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.')
-                                    ->with('typealert', 'warning');                                
-                            else:
-                                $c->amount_dmo_am = $c->amount_dmo_am + 1;
+                        endif;
+                        $control->save();
+                    else:
+                        $ca1 = ControlAppointment::where('date' , $request->input('date'))->get();
+                        foreach($ca1 as $c):
+                            if($area == 0 ):
+                                $c->amount_rx = $c->amount_rx + 1;   
+                                if($area_temp != NULL):
+                                    if($request->input('schedule') >= 1 && $request->input('schedule') <= 10):
+                                        if($c->amount_rx_special_am == Config::get('agem.appo_rx_special_am')):
+                                            return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.') 
+                                                ->with('typealert', 'warning');                                
+                                        else:
+                                            $c->amount_rx_special_am = $c->amount_rx_special_am + 1;
+                                        endif;
+                                    else:
+                                        if($c->amount_rx_special_pm == Config::get('agem.appo_rx_special_pm')):
+                                            return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.')
+                                                ->with('typealert', 'warning');                                
+                                        else:
+                                            $c->amount_rx_special_pm = $c->amount_rx_special_pm + 1;
+                                        endif;
+                                    endif;
+                                endif;     
+
+                            elseif($area == 2):
+                                if($c->amount_usg == 10 || $c->amount_usg_doppler == 4 ):
+                                    return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.')
+                                            ->with('typealert', 'warning');
+                                else:
+                                    $doppler = Studie::findOrFail($request->get('idstudy'));                    
+                                    foreach($doppler as $d):
+                                        if($d->is_doppler == '1'):
+                                            $c->amount_usg_doppler = $c->amount_usg_doppler + 1;
+                                            if($request->input('schedule') >= 1 && $request->input('schedule') <= 10):
+                                                $c->amount_usg_doppler_am = $c->amount_usg_doppler_am + 1;
+                                            else:
+                                                $c->amount_usg_doppler_pm = $c->amount_usg_doppler_pm + 1;
+                                            endif;
+                                        else:
+                                            if($request->input('schedule') >= 1 && $request->input('schedule') <= 10):
+                                                $c->amount_usg_am = $c->amount_usg_am + 1;
+                                            else:
+                                                $c->amount_usg_pm = $c->amount_usg_pm + 1;
+                                            endif;
+                                        endif;                    
+                                    endforeach;                            
+                                endif;                        
+                            elseif($area == 3):
+                                if($request->input('schedule') >= 1 && $request->input('schedule') <= 10):
+                                    if($c->amount_mmo_am == Config::get('agem.appo_mmo_am')):
+                                        return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.')
+                                            ->with('typealert', 'warning');                                
+                                    else:
+                                        $c->amount_mmo_am = $c->amount_mmo_am + 1;
+                                    endif;
+                                else:
+                                    if($c->amount_mmo_pm == Config::get('agem.appo_mmo_pm')):
+                                        return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.')
+                                            ->with('typealert', 'warning');                                
+                                    else:
+                                        $c->amount_mmo_pm = $c->amount_mmo_pm + 1;
+                                    endif;
+                                endif;                        
+                            elseif($area == 4):
+                                if($request->input('schedule') >= 1 && $request->input('schedule') <= 10):
+                                    if($c->amount_dmo_am == Config::get('agem.appo_dmo_am')):
+                                        return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.')
+                                            ->with('typealert', 'warning');                                
+                                    else:
+                                        $c->amount_dmo_am = $c->amount_dmo_am + 1;
+                                    endif;
+                                else:
+                                    if($c->amount_dmo_pm == Config::get('agem.appo_dmo_pm')):
+                                        return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.')
+                                            ->with('typealert', 'warning');                                
+                                    else:
+                                        $c->amount_dmo_pm = $c->amount_dmo_pm + 1;
+                                    endif;
+                                endif;                        
                             endif;
-                        else:
-                            if($c->amount_dmo_pm == Config::get('agem.appo_dmo_pm')):
-                                return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.')
-                                    ->with('typealert', 'warning');                                
-                            else:
-                                $c->amount_dmo_pm = $c->amount_dmo_pm + 1;
-                            endif;
-                        endif;                        
+                            $c->save();
+                        endforeach;
+                        
                     endif;
-                    $c->save();
-                endforeach;
-                
-            endif;          
 
-            if($code_assig != NULL):
-                $appointment->num_study = $code_assig;
+                    if($request->input('num_code_new') != NULL):
+                        $appointment->num_study = $request->input('num_code_new');
+                    endif;
+                    $appointment->type = '0';
+                    $appointment->area = $area;
+                    $appointment->service = $solicitante;
+                    $appointment->status = '0';    
+                    $appointment->save();      
+            
+                    $idservice = $request->get('idservice');          
+                    $idstudy = $request->get('idstudy');
+                    $comment = $request->get('comment');
+            
+                    $cont=0;
+            
+                    while ($cont<count($idservice)) {
+                        $detalle = new DetailAppointment();
+                        $detalle->idappointment=$appointment->id;
+                        $detalle->idservice=$idservice[$cont];
+                        $detalle->idstudy=$idstudy[$cont];
+                        $detalle->comment=$comment[$cont];
+                        $detalle->save();
+                        $cont=$cont+1;
+                    }
+            
+                    DB::commit();
+            
+                    if($appointment->save()):                 
+                        
+                        $b = new Bitacora;
+                        $b->action = "Registro de cita para paciente con afiliación: ".$patient_new->affiliation;
+                        $b->user_id = Auth::id();
+                        $b->save();
+            
+                        return redirect('/admin/citas')->with('messages', '¡Cita agendada y guardada con exito!.')
+                            ->with('typealert', 'success');
+                    endif;
+
+
+                endif;
             endif;
-            $appointment->type = $appointments_type;
-            $appointment->area = $area;
-            $appointment->service = $solicitante;
-            $appointment->status = '0';    
-            $appointment->save();      
-
-            $patient_aux = Patient::findOrFail($idpatient);
-            $patient_aux->contact =  $request->get('contactp');
-            $patient_aux->save();
-
-            $idservice = $request->get('idservice');          
-            $idstudy = $request->get('idstudy');
-            $comment = $request->get('comment');
-
-            $cont=0;
-
-            while ($cont<count($idservice)) {
-                $detalle = new DetailAppointment();
-                $detalle->idappointment=$appointment->id;
-                $detalle->idservice=$idservice[$cont];
-                $detalle->idstudy=$idstudy[$cont];
-                $detalle->comment=$comment[$cont];
-                $detalle->save();
-                $cont=$cont+1;
-            }
-
-            DB::commit();
-
-            if($appointment->save()):  
-                
-
-                
-
-                foreach($affiliation_p as $ap):
-                    $afp = $ap->affiliation;
-                endforeach;
-
-                $b = new Bitacora;
-                $b->action = "Registro de cita para paciente con afiliación: ".$afp;
-                $b->user_id = Auth::id();
-                $b->save();
-
-                return redirect('/admin/citas')->with('messages', '¡Cita agendada y guardada con exito!.')
-                    ->with('typealert', 'success');
-    		endif;
         endif;
     }
 
@@ -479,7 +716,7 @@ class AppointmentController extends Controller
         $patient = Patient::where('id', $appointment->patient_id)
                         ->limit(1)
                         ->get();
-        $hora = Carbon::now()->addHours(1)->format('H:i');
+        $hora = Carbon::now()->addHour(1)->format('H:i');
         switch($appointment->area):
             case '0':
                 $nomen = 'RX';
@@ -516,7 +753,7 @@ class AppointmentController extends Controller
         if($status == "1"):
             if($num_exp === 0):
                 return redirect('/admin/citas')->with('messages', '¡Asigne un numero de expediente primero!.')
-                    ->with('typealert', 'warning'); 
+                    ->with('typealert', 'warning');  
             else:
                 
                 $appointment->num_study = $num_exp;                    

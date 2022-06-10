@@ -36,6 +36,8 @@
                             <a href="{{ url('/admin/cita/agregar') }}" class="btn btn-sm btn-warning " data-toogle="tooltrip" data-placement="top" title="Limpiar" ><i class="fa fa-refresh"></i> </a>
                         </div>
 
+                        <label class="mtop16" style="color: red; font-size: 1em; margin-left: 50px; font-weight: bold; display: none;" id="patient_msg" >¡No se encontró al paciente, regístrelo por favor!</label>
+
                         <label for="name" class="mtop16"><strong> Nombre:</strong></label>
                         <div class="input-group">
                             <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
@@ -62,13 +64,102 @@
 
                         
 
+                        
+                        
 
                     </div>
 
                 </div>
             </div>
 
-            <div class="col-md-4 d-flex"> 
+            <div class="col-md-4" id="register" style="display: none;"> 
+                <div class="panel shadow">
+                    <div class="header">
+                        <h2 class="title"><i class="fas fa-calendar-alt"></i><strong> Registro de Paciente</strong></h2>
+                    </div>
+
+                    <div class="inside"> 
+
+                        <label for="name"><strong> Nombre:</strong></label>
+                        <div class="input-group">
+                            <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
+                            {!! Form::text('name_new', null, ['class'=>'form-control']) !!}
+                            {!! Form::select('type_patient_new', getTypePatient('list', null),0,['class'=>'form-select col-md-2', 'id'=> 'patient_type' ]) !!}
+                        </div>
+
+                        <label for="name" class="mtop16"><strong> Apellidos:</strong></label>
+                        <div class="input-group">
+                            <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
+                            {!! Form::text('lastname_new', null, ['class'=>'form-control']) !!}
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <label for="name" class="mtop16"><strong>Genero:</strong></label>
+                                <div class="input-group">
+                                    <span class="input-group-text" id="basic-addon1"><i class="fas fa-layer-group"></i></span>
+                                    {!! Form::select('gender_new', getGenderPatient('list', null),0,['class'=>'form-select']) !!}
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <label for="name" class="mtop16"><strong>Edad:</strong></label>
+                                <div class="input-group">
+                                    <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
+                                    {!! Form::text('age_new', null, ['class'=>'form-control']) !!}
+                                </div>
+                            </div>
+                        </div>
+
+                        <label for="name" class="mtop16"><strong> Contacto:</strong></label>
+                        <div class="input-group">
+                            <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
+                            {!! Form::text('contact_new', null, ['class'=>'form-control']) !!}
+                        </div>
+
+                        <label for="name" class="mtop16"><strong> Numero de Expediente:</strong></label>
+                        <div class="input-group">
+                            <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
+                            {!! Form::text('num_code_new', null, ['class'=>'form-control', 'id' => 'num_code_new']) !!}
+                            <a href="#" class="btn btn-sm btn-primary " id="btn_generate_code" ><i class="fas fa-qrcode"></i> Generar</a>
+                        </div>
+
+                        <div class="input-group"> 
+                            <div id="div_manual_code_code" style="display: block; margin-top: 10px;">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="ibm" class="mtop16"><strong> Nomenclatura:</strong></label>
+                                        {!! Form::text('num_code_nom', null, ['class'=>'form-control', 'id' => 'num_code_nom']) !!}
+                                    </div>
+
+                                    <div class="col-md-6"> 
+                                        <label for="ibm" class="mtop16"><strong> Correlativo:</strong></label>
+                                        {!! Form::text('num_code_cor', null, ['class'=>'form-control', 'id' => 'num_code_cor']) !!} 
+                                    </div>                                    
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">  
+                                        <label for="ibm" class="mtop16"><strong> Año:</strong></label>
+                                        {!! Form::text('num_code_y', null, ['class'=>'form-control', 'id' => 'num_code_y']) !!} 
+                                    </div>
+                                </div>
+                                <hr>
+                            </div>
+                            
+                        </div>
+
+                        
+                    
+                        
+                    </div>
+
+                </div>
+            </div>
+
+            <!--<div class="col-md-4 d-flex"> 
                 <div class="panel shadow">
                     <div class="header">
                         <h2 class="title"><i class="fas fa-calendar-alt"></i><strong> Ultimo Examen Realizado</strong></h2>
@@ -117,7 +208,7 @@
                     </div>
 
                 </div>
-            </div>
+            </div> -->
 
             <div class="col-md-4 d-flex">
                 <div class="panel shadow">
@@ -220,6 +311,7 @@
 
 
     <script>
+       
         var modal = document.getElementById('modelId');
         $("#btn_guardar").hide();
         var cont = 0;

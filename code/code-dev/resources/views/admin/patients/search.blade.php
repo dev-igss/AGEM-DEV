@@ -56,7 +56,7 @@
                     <div class="col-md-9" style="margin-left: 200px; margin-bottom: 25px;">
                         {!! Form::open(['url' => '/admin/paciente/busqueda']) !!}
                             <div class="input-group">
-                                {!! Form::text('search', null, ['class' => 'form-control', 'placeholder' => 'Realice una busqueda', 'required']) !!}
+                                {!! Form::text('search', $busqueda, ['class' => 'form-control', 'placeholder' => 'Realice una busqueda', 'required']) !!}
                                 {!! Form::submit('Buscar', ['class'=>'btn btn-primary']) !!}
                             </div>
                         {!! Form::close() !!}

@@ -21,7 +21,7 @@ Route::post('/inicio_sesion','ConnectController@postLogin')->name('login');
 Route::get('/logout','ConnectController@getLogout')->name('logout');
 
 Route::get('/citas_del_dia_rx', 'PatientDayController@getPatientDayRx')->name('patient_day');
-Route::get('/citas_del_dia_umd', 'PatientDayController@getPatientDayUmd')->name('patient_day');
+Route::get('/citas_del_dia_umd/{filtrado}', 'PatientDayController@getPatientDayUmd')->name('patient_day');
 Route::get('/citas_del_dia/{id}/materiales', 'PatientDayController@getMaterials')->name('materials');
 Route::post('/citas_del_dia/materiales', 'PatientDayController@postMaterials')->name('materials'); 
 Route::get('/citas_del_dia/acciones/{id}/comentario/{text}', 'PatientDayController@getAppointmentComment')->name('materials'); 

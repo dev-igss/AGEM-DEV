@@ -149,6 +149,39 @@ class PatientController extends Controller
         return view('admin.patients.home',$data);
     }
 
+    public function postSearch(Request $request){
+        $rules = [
+            'search' => 'required'
+        ];
+
+        $messages = [
+            'search.required' => 'El campo consulta es requerido.'
+        ];
+
+        $validator = Validator::make($request->all(),$rules,$messages);
+
+        if($validator->fails()):
+            return back()->withErrors($validator)->with('messages', '¡Se ha producido un error!.')
+            ->with('typealert', 'danger')->withInput();
+        else:
+            $patients = Patient::with(['parent'])
+                        ->where('affiliation','LIKE','%'.$request->input('search').'%')
+                        ->orWhere('name','LIKE','%'.$request->input('search').'%')
+                        ->orWhere('lastname','LIKE','%'.$request->input('search').'%')
+                        ->get();
+            $busqueda = $request->input('search');
+            $data = [
+                'patients' => $patients,
+                'busqueda' => $busqueda
+            ];
+
+            return view('admin.patients.search', $data); 
+        
+        endif;
+
+        
+    }
+
     public function getPatientAdd(){
 
         $units = Unit::all();

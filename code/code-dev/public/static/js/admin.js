@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function(){
     var btn_generate_code_usg = document.getElementById('btn_generate_code_usg');
     var btn_generate_code_mmo = document.getElementById('btn_generate_code_mmo');
     var btn_generate_code_dmo = document.getElementById('btn_generate_code_dmo');
+    var btn_generate_code = document.getElementById('btn_generate_code');
     var btn_manual_code_rx = document.getElementById('btn_manual_code_rx');
     var btn_manual_code_usg = document.getElementById('btn_manual_code_usg');
     var btn_manual_code_mmo = document.getElementById('btn_manual_code_mmo');
@@ -51,6 +52,14 @@ document.addEventListener('DOMContentLoaded', function(){
             setGenerateCodeDmo();
         });
     }
+
+    if(btn_generate_code){
+        btn_generate_code.addEventListener('click', function(e){
+            e.preventDefault();
+            setGenerateCode();
+        });
+    }
+
 
     if(btn_manual_code_rx){
         btn_manual_code_rx.addEventListener('click', function(e){
@@ -244,8 +253,8 @@ function delete_object(e){
     var idstudy = this.getAttribute('data-study');
     var exam = this.getAttribute('data-exam');
     //console.log(exam);
-    //var url = base + '/agem/public/' + path + '/' + object + '/' + action;
-    var url = base + '/' + path + '/' + object + '/' + action;
+    var url = base + '/agem/public/' + path + '/' + object + '/' + action;
+    //var url = base + '/' + path + '/' + object + '/' + action;
     var title, text, icon, date, status, material, amount, comment;
     var today = new Date();
     var dd = today.getDate();
@@ -372,7 +381,7 @@ function delete_object(e){
     }else if(action == "paciente_ausente"){
         Swal.fire({
             title: title,
-            text: text,
+            text: text, 
             icon: icon,
             confirmButtonText: 'Aceptar',
             cancelButtonText: 'Cancelar',
@@ -434,8 +443,8 @@ function delete_object(e){
 function setInfoAddPatient(){
     var exam = document.getElementById('exam_b').value;    
     var affiliation_b = document.getElementById('affiliationp').value;
-    //var url = base + '/agem/public/admin/agem/api/load/add/patient/'+affiliation_b+'/'+exam;
-    var url = base + '/admin/agem/api/load/add/patient/'+affiliation_b+'/'+exam;
+    var url = base + '/agem/public/admin/agem/api/load/add/patient/'+affiliation_b+'/'+exam;
+    //var url = base + '/admin/agem/api/load/add/patient/'+affiliation_b+'/'+exam;
     var patient_id = document.getElementById('patient_id');
     var name = document.getElementById('namep');
     var lastname = document.getElementById('lastnamep');
@@ -453,32 +462,30 @@ function setInfoAddPatient(){
             var data = this.responseText;
             data = JSON.parse(data);
             type_exam.value = data.exam;
+            console.log(data)
             if('patient' in data){
                 patient_id.value = data.patient[0].id;
                 name.value = data.patient[0].name;
                 lastname.value = data.patient[0].lastname;
                 contact.value = data.patient[0].contact;
-            }           
+            }      
+            else{
+                document.getElementById("patient_msg").style.display = "block";
+                document.getElementById("register").style.display = "block";
+                document.getElementById("register").classList.add("d-flex");
+            }  
+
             if('code_last' in data){
                 code_last.value = data.code_last[0].code;
             }
             //console.log(data);
-            if('appointment_last' in data){
-                date_al.value = data.appointment_last[0].date;
-                numexp_al.value = data.appointment_last[0].num_study; 
-                for(i=0; i<data.detalles.length; i++){
-                    var fila='<tr><td><input type="hidden" >'+data.detalles[i].service.name+'</td><td><input type="hidden" >'+data.detalles[i].study.name+'</td></tr>';
-                    $('#detalles1').append(fila);
-                }
-            }else{
-                document.getElementById("appointment_msg").style.display = "block";
-            }
+            
 
             var studies_actual = document.getElementById('studies_actual').value;
             select = document.getElementById('studies');
             select.innerHTML = "";
-            //var url = base + '/agem/public/admin/agem/api/load/studies/'+exam;
-            var url = base + '/admin/agem/api/load/studies/'+exam;
+            var url = base + '/agem/public/admin/agem/api/load/studies/'+exam;
+            //var url = base + 'admin/agem/api/load/studies/'+exam;
             http.open('GET', url, true);
             http.setRequestHeader('X-CSRF-TOKEN', csrfToken);
             http.send();
@@ -505,8 +512,8 @@ function setInfoAddPatient(){
 
 function setGenerateCodeRx(){
     var nomenclatura = 'RX';
-    //var url = base + '/agem/public/admin/agem/api/load/generate/code/'+nomenclatura;
-    var url = base + '/admin/agem/api/load/generate/code/'+nomenclatura;
+    var url = base + '/agem/public/admin/agem/api/load/generate/code/'+nomenclatura;
+    //var url = base + '/admin/agem/api/load/generate/code/'+nomenclatura;
     var num_rx = document.getElementById('pnum_rx');
     var nomenclature = document.getElementById('pnum_rx_nom');
     var correlative = document.getElementById('pnum_rx_cor');
@@ -529,8 +536,8 @@ function setGenerateCodeRx(){
 
 function setGenerateCodeUsg(){
     var nomenclatura = 'USG';
-    //var url = base + '/agem/public/admin/agem/api/load/generate/code/'+nomenclatura;
-    var url = base + '/admin/agem/api/load/generate/code/'+nomenclatura;
+    var url = base + '/agem/public/admin/agem/api/load/generate/code/'+nomenclatura;
+    //var url = base + '/admin/agem/api/load/generate/code/'+nomenclatura;
     var num_usg = document.getElementById('pnum_usg');
     var nomenclature = document.getElementById('pnum_usg_nom');
     var correlative = document.getElementById('pnum_usg_cor');
@@ -553,8 +560,8 @@ function setGenerateCodeUsg(){
 
 function setGenerateCodeMmo(){
     var nomenclatura = 'MMO';
-    //var url = base + '/agem/public/admin/agem/api/load/generate/code/'+nomenclatura;
-    var url = base + '/admin/agem/api/load/generate/code/'+nomenclatura;
+    var url = base + '/agem/public/admin/agem/api/load/generate/code/'+nomenclatura;
+    //var url = base + '/admin/agem/api/load/generate/code/'+nomenclatura;
     var num_mmo = document.getElementById('pnum_mmo');
     var nomenclature = document.getElementById('pnum_mmo_nom');
     var correlative = document.getElementById('pnum_mmo_cor');
@@ -577,8 +584,8 @@ function setGenerateCodeMmo(){
 
 function setGenerateCodeDmo(){
     var nomenclatura = 'DMO';
-    //var url = base + '/agem/public/admin/agem/api/load/generate/code/'+nomenclatura;
-    var url = base + '/admin/agem/api/load/generate/code/'+nomenclatura;
+    var url = base + '/agem/public/admin/agem/api/load/generate/code/'+nomenclatura;
+    //var url = base + '/admin/agem/api/load/generate/code/'+nomenclatura;
     var num_dmo = document.getElementById('pnum_dmo');
     var nomenclature = document.getElementById('pnum_dmo_nom');
     var correlative = document.getElementById('pnum_dmo_cor');
@@ -599,6 +606,46 @@ function setGenerateCodeDmo(){
     }
 }
 
+function setGenerateCode(){
+    var area_exam = document.getElementById('exam_b');
+    var nomenclatura;
+    //console.log(area_exam.value);
+    
+    if(area_exam.value === '0'){
+        nomenclatura = "RX";
+    }else if(area_exam.value === '1'){
+        nomenclatura = "RX";
+    }else if(area_exam.value === '2'){
+        nomenclatura = "USG";
+    }else if(area_exam.value === '3'){
+        nomenclatura = "MMO";
+    }else if(area_exam.value === '4'){
+        nomenclatura = "DMO";
+    }        
+    //console.log(nomenclatura);
+    
+    var url = base + '/agem/public/admin/agem/api/load/generate/code/'+nomenclatura;
+    //var url = base + '/admin/agem/api/load/generate/code/'+nomenclatura;
+    var num_code = document.getElementById('num_code_new');
+    var nomenclature = document.getElementById('num_code_nom');
+    var correlative = document.getElementById('num_code_cor');
+    var year = document.getElementById('num_code_y');
+
+    http.open('GET', url, true);
+    http.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+    http.send();
+    http.onreadystatechange = function(){
+        if(this.readyState == 4 && this.status == 200){
+            var data = this.responseText;
+            data = JSON.parse(data);
+            num_code.value = data.code;
+            nomenclature.value = data.nomenclature;
+            correlative.value = data.correlative;
+            year.value = data.year;            
+        }
+    }
+}
+
 function getDisponibilidadHorario(){
     var citas_configuradas = document.getElementById('citas_configuradas').value;
     var inputdate = document.getElementById('date_new_app');
@@ -614,8 +661,8 @@ function getDisponibilidadHorario(){
         var year = fecha[0]+fecha[1]+fecha[2]+fecha[3];
         var exam = document.getElementById('exam_b').value;
         
-        //var url = base + '/agem/public/admin/agem/api/load/schedules/'+fecha+'/'+exam;
-        var url = base + '/admin/agem/api/load/schedules/'+fecha+'/'+exam;
+        var url = base + '/agem/public/admin/agem/api/load/schedules/'+fecha+'/'+exam;
+        //var url = base + '/admin/agem/api/load/schedules/'+fecha+'/'+exam;
         http.open('GET', url, true);
         http.setRequestHeader('X-CSRF-TOKEN', csrfToken);
         http.send();

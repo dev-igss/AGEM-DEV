@@ -4,7 +4,21 @@
 <section style="text-align: center;">
     <div class="home_action_bar shadow">
         <div class="row"> 
-            <h2><strong>Estudios USG-MMO-DMO Del Día: {{ $date }} </strong></h2>
+            <div class="col-md-3">
+                <div class="categories">
+                    <a href="#"><i class="fas fa-stream"></i> Filtar</a>
+                    <ul class="shadow">
+                            <li>
+                                <a href="{{ url('/citas_del_dia_umd/todas') }}"> Todas las Citas </a>
+                                <a href="{{ url('/citas_del_dia_umd/usg') }}"> Citas de USG </a>
+                                <a href="{{ url('/citas_del_dia_umd/mmo') }}"> Citas de MMO </a>
+                                <a href="{{ url('/citas_del_dia_umd/dmo') }}"> Citas de DMO </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+
+            <h4 style="margin-top: -35px; "><strong>Estudios USG-MMO-DMO Del Día: {{ $date }} </strong></h4>
         </div>        
     </div>
 </section>

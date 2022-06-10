@@ -37,7 +37,8 @@
         //Patients        
         Route::get('/paciente/agregar', 'Admin\PatientController@getPatientAdd')->name('patient_add');        
         Route::post('/paciente/agregar', 'Admin\PatientController@postPatientAdd')->name('patient_add');   
-        Route::get('/pacientes/{filtro}', 'Admin\PatientController@getHome')->name('patient_list');      
+        Route::get('/pacientes/{filtro}', 'Admin\PatientController@getHome')->name('patient_list');  
+        Route::post('/paciente/busqueda', 'Admin\PatientController@postSearch')->name('patient_list');       
         Route::get('/paciente/{id}/editar', 'Admin\PatientController@getPatientEdit')->name('patient_edit');
         Route::post('/paciente/{id}/editar', 'Admin\PatientController@postPatientEdit')->name('patient_edit');
         Route::get('/paciente/{id}/actualizar/afiliacion/principal/{affiliation}', 'Admin\PatientController@getPatientUpdateParent')->name('patient_edit');

@@ -18,101 +18,64 @@ class ApiController extends Controller
 
     public function getPatient($code, $exam){
         $patient = Patient::where('affiliation', $code)
-            ->get();
+            ->get(); 
 
-        foreach($patient as $p):
-            $id_temp = $p->id;
-        endforeach;
-
-        switch($exam):
-            case 0:
-                $code_temp_last = CodePatient::where('patient_id', $id_temp)
-                    ->where('nomenclature', 'RX')
-                    ->where('status', '0')
-                    ->get();
-            break;
-
-            case 1:
-                $code_temp_last = CodePatient::where('patient_id', $id_temp)
-                    ->where('nomenclature', 'RX')
-                    ->where('status', '0')
-                    ->get();
-            break;
-
-            case 2:
-                $code_temp_last = CodePatient::where('patient_id', $id_temp)
-                    ->where('nomenclature', 'USG')
-                    ->where('status', '0')
-                    ->get();
-            break;
-
-            case 3:
-                $code_temp_last = CodePatient::where('patient_id', $id_temp)
-                    ->where('nomenclature', 'MMO')
-                    ->where('status', '0')
-                    ->get();
-            break;
-
-            case 4:
-                $code_temp_last = CodePatient::where('patient_id', $id_temp)
-                    ->where('nomenclature', 'DMO')
-                    ->where('status', '0')
-                    ->get();
-            break;
-
-        endswitch;
-
-        if(count($code_temp_last) > 0):
-            $code_last = $code_temp_last;
-        else:
-            $code_last = [];
-        endif;
-
-
-        if($exam == "1"):
-            $appoinment_last = Appointment::where('patient_id', $id_temp)
-                ->where('area','0')
-                ->orderBy('created_at', 'desc')
-                ->limit(1)
-                ->get();
-        else:
-            $appoinment_last = Appointment::where('patient_id', $id_temp)
-                ->where('area',$exam)
-                ->orderBy('created_at', 'desc')
-                ->limit(1)
-                ->get();
-        endif;       
-
-        if(count($appoinment_last) == 0):
-            $service = "";            
-            $studie = "";
-
-            if(count($code_last) == 0):
+        if(count($patient) == 0):
+            $data = [
                 
-                $data = [
-                    'patient' => $patient,
-                    'exam' => $exam
-                ];
+            ];
+        else:
+            foreach($patient as $p):
+                $id_temp = $p->id;
+            endforeach;
+
+            switch($exam):
+                case 0:
+                    $code_temp_last = CodePatient::where('patient_id', $id_temp)
+                        ->where('nomenclature', 'RX')
+                        ->where('status', '0')
+                        ->get();
+                break;
+
+                case 1:
+                    $code_temp_last = CodePatient::where('patient_id', $id_temp)
+                        ->where('nomenclature', 'RX')
+                        ->where('status', '0')
+                        ->get();
+                break;
+
+                case 2:
+                    $code_temp_last = CodePatient::where('patient_id', $id_temp)
+                        ->where('nomenclature', 'USG')
+                        ->where('status', '0')
+                        ->get();
+                break;
+
+                case 3:
+                    $code_temp_last = CodePatient::where('patient_id', $id_temp)
+                        ->where('nomenclature', 'MMO')
+                        ->where('status', '0')
+                        ->get();
+                break;
+
+                case 4:
+                    $code_temp_last = CodePatient::where('patient_id', $id_temp)
+                        ->where('nomenclature', 'DMO')
+                        ->where('status', '0')
+                        ->get();
+                break;
+
+            endswitch;
+
+            if(count($code_temp_last) > 0):
+                $code_last = $code_temp_last;
             else:
-                $data = [
-                    'patient' => $patient,
-                    'code_last' => $code_last,
-                    'exam' => $exam
-                ];
+                $code_last = [];
             endif;
 
-            
-
-        else:
-            foreach($appoinment_last as $al):
-                $detalles = DetailAppointment::with(['service', 'study'])->where('idappointment', $al->id)->get(); 
-            endforeach; 
-            
             if(count($code_last) == 0):
                 $data = [
                     'patient' => $patient,
-                    'appointment_last' => $appoinment_last,
-                    'detalles' => $detalles,
                     'exam' => $exam
                 ];
             else:
@@ -121,14 +84,10 @@ class ApiController extends Controller
                 $data = [
                     'patient' => $patient,
                     'code_last' => $code_last,
-                    'appointment_last' => $appoinment_last,
-                    'detalles' => $detalles,
                     'exam' => $exam
                 ];
             endif;
         endif;
-
-               
 
         
         
@@ -144,17 +103,18 @@ class ApiController extends Controller
                                 ->where('year',$date->year)
                                 ->count();
         $nomenclature = $code;
-        
+
         if($nomenclature == 'RX' && $date->year == '2022'):
             $correlative = $codes_ant +'1';
+
         elseif($nomenclature == 'USG' && $date->year == '2022'):
             $correlative = $codes_ant +'3031';
         elseif($nomenclature == 'MMO' && $date->year == '2022'):
-            $correlative = $codes_ant +'1';
+            $correlative = $codes_ant +'50';
         elseif($nomenclature == 'DMO' && $date->year == '2022'):
-            $correlative = $codes_ant +'1';
+            $correlative = $codes_ant +'150';
         else:
-            $correlative = $codes_ant +'2';
+            $correlative = $codes_ant +'1';
         endif;
         
         
