@@ -85,6 +85,7 @@
         
         //Request Ajax 
         Route::get('/agem/api/load/add/patient/{code}/{exam}', 'Admin\ApiController@getPatient');
+        Route::get('/agem/api/load/add/patient/beneficiario/{code}/{exam}', 'Admin\ApiController@getPatientBeneficiario');
         Route::get('/agem/api/load/generate/code/{code}', 'Admin\ApiController@getCodePatient');
         Route::get('/agem/api/load/studies/{type}', 'Admin\ApiController@getStudies');
         Route::get('/agem/api/load/appointments/{date}/{area}', 'Admin\ApiController@getAppointments');

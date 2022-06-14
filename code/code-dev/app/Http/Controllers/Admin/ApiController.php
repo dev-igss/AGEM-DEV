@@ -18,6 +18,7 @@ class ApiController extends Controller
 
     public function getPatient($code, $exam){
         $patient = Patient::where('affiliation', $code)
+            ->orderBy('type', 'ASC')
             ->get(); 
 
         if(count($patient) == 0):
@@ -25,9 +26,18 @@ class ApiController extends Controller
                 
             ];
         else:
-            foreach($patient as $p):
-                $id_temp = $p->id;
-            endforeach;
+            if(count($patient) > 1):
+                foreach($patient as $p):
+
+                    if(  $p->type == '0'):
+                        $id_temp = $p->id;
+                    endif;
+                endforeach;
+            else:
+                foreach($patient as $p):
+                    $id_temp = $p->id;
+                endforeach;
+            endif;
 
             switch($exam):
                 case 0:
@@ -88,6 +98,70 @@ class ApiController extends Controller
                 ];
             endif;
         endif;
+
+        
+        
+        
+
+        return response()->json($data);
+    }
+
+    public function getPatientBeneficiario($code, $exam){
+            switch($exam):
+                case 0:
+                    $code_temp_last = CodePatient::where('patient_id', $code)
+                        ->where('nomenclature', 'RX')
+                        ->where('status', '0')
+                        ->get();
+                break;
+
+                case 1:
+                    $code_temp_last = CodePatient::where('patient_id', $code)
+                        ->where('nomenclature', 'RX')
+                        ->where('status', '0')
+                        ->get();
+                break;
+
+                case 2:
+                    $code_temp_last = CodePatient::where('patient_id', $code)
+                        ->where('nomenclature', 'USG')
+                        ->where('status', '0')
+                        ->get();
+                break;
+
+                case 3:
+                    $code_temp_last = CodePatient::where('patient_id', $code)
+                        ->where('nomenclature', 'MMO')
+                        ->where('status', '0')
+                        ->get();
+                break;
+
+                case 4:
+                    $code_temp_last = CodePatient::where('patient_id', $code)
+                        ->where('nomenclature', 'DMO')
+                        ->where('status', '0')
+                        ->get();
+                break;
+
+            endswitch;
+
+            if(count($code_temp_last) > 0):
+                $code_last = $code_temp_last;
+            else:
+                $code_last = [];
+            endif;
+
+            if(count($code_last) == 0):
+                $data = [
+                    
+                ];
+            else:
+                
+
+                $data = [
+                    'code_last' => $code_last
+                ];
+            endif;
 
         
         

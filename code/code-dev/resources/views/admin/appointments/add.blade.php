@@ -37,6 +37,26 @@
                         </div>
 
                         <label class="mtop16" style="color: red; font-size: 1em; margin-left: 50px; font-weight: bold; display: none;" id="patient_msg" >¡No se encontró al paciente, regístrelo por favor!</label>
+                        
+                        
+
+                        <div class="input-group">
+
+                            <div id="div_beneficiarios" style="display: none; margin-top: 10px; width: 100%;">
+                                <label for="name" class="mtop16"><strong>¿Seleccionar Beneficiario?:</strong></label>
+                                <div class="input-group ">
+                                    <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
+                                    {!! Form::select('beneficiario_question', ['0'=>'No','1'=>'Sí'],0,['class'=>'form-select', 'id'=>'beneficiario_question']) !!}
+                                </div>
+
+                                <div id="div_select_beneficiarios" style="display: none; margin-top: 10px; width: 100%;">
+                                    <select name="beneficiarios" id="beneficiarios" class="form-select " aria-label="Default select example">
+                                        <option selected>Seleccione una opción</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                            
 
                         <label for="name" class="mtop16"><strong> Nombre:</strong></label>
                         <div class="input-group">
@@ -59,7 +79,33 @@
                         <label for="name" class="mtop16"><strong> Numero de Expediente Actual:</strong></label>
                         <div class="input-group">
                             <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
-                            {!! Form::text('numexpp', null, ['class'=>'form-control', 'id' => 'numexpp','readonly']) !!}
+                            {!! Form::text('numexpp', null, ['class'=>'form-control', 'id' => 'numexpp', 'readonly']) !!}
+                            <a href="#" class="btn btn-sm btn-primary " id="btn_generate_code_patient_actual" ><i class="fas fa-qrcode"></i> Generar</a>
+                        </div>
+
+                        <div class="input-group"> 
+                            <div id="div_manual_code_code" style="display: none; margin-top: 10px;">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="ibm" class="mtop16"><strong> Nomenclatura:</strong></label>
+                                        {!! Form::text('num_code_nom_act', null, ['class'=>'form-control', 'id' => 'num_code_nom_act']) !!}
+                                    </div>
+
+                                    <div class="col-md-6"> 
+                                        <label for="ibm" class="mtop16"><strong> Correlativo:</strong></label>
+                                        {!! Form::text('num_code_cor_act', null, ['class'=>'form-control', 'id' => 'num_code_cor_act']) !!} 
+                                    </div>                                    
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">  
+                                        <label for="ibm" class="mtop16"><strong> Año:</strong></label>
+                                        {!! Form::text('num_code_y_act', null, ['class'=>'form-control', 'id' => 'num_code_y_act']) !!} 
+                                    </div>
+                                </div>
+                                <hr>
+                            </div>
+                            
                         </div>
 
                         
@@ -257,7 +303,13 @@
                         <label for="name" class="mtop16"><strong> Comentario:</strong></label>
                         <div class="input-group">
                             <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
-                            {!! Form::textarea('pcomment', null, ['class'=>'form-control', 'rows' => '2', 'id'=>'pcomment']) !!}
+                            {!! Form::textarea('pcomment', null, ['class'=>'form-control', 'rows' => '1', 'id'=>'pcomment']) !!}
+                        </div>
+
+                        <label for="name" class="mtop16"><strong>¿Paciente Presente?:</strong></label>
+                        <div class="input-group">
+                            <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
+                            {!! Form::select('present_patient', ['0'=>'No','1'=>'Sí'],0,['class'=>'form-select' ]) !!}
                         </div>
 
                         <div class="input-group mtop16">

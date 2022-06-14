@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function(){
     var btn_generate_code_mmo = document.getElementById('btn_generate_code_mmo');
     var btn_generate_code_dmo = document.getElementById('btn_generate_code_dmo');
     var btn_generate_code = document.getElementById('btn_generate_code');
+    var btn_generate_code_patient_actual = document.getElementById('btn_generate_code_patient_actual');
     var btn_manual_code_rx = document.getElementById('btn_manual_code_rx');
     var btn_manual_code_usg = document.getElementById('btn_manual_code_usg');
     var btn_manual_code_mmo = document.getElementById('btn_manual_code_mmo');
@@ -57,6 +58,13 @@ document.addEventListener('DOMContentLoaded', function(){
         btn_generate_code.addEventListener('click', function(e){
             e.preventDefault();
             setGenerateCode();
+        });
+    }
+
+    if(btn_generate_code_patient_actual){
+        btn_generate_code_patient_actual.addEventListener('click', function(e){
+            e.preventDefault();
+            setGenerateCodePatientActual();
         });
     }
 
@@ -240,6 +248,7 @@ document.addEventListener('DOMContentLoaded', function(){
         placeholder: "Seleccione una Opción",
         allowClear: true
     });
+
 
 });
 
@@ -462,7 +471,7 @@ function setInfoAddPatient(){
             var data = this.responseText;
             data = JSON.parse(data);
             type_exam.value = data.exam;
-            console.log(data)
+            //console.log(data);
             if('patient' in data){
                 patient_id.value = data.patient[0].id;
                 name.value = data.patient[0].name;
@@ -478,7 +487,92 @@ function setInfoAddPatient(){
             if('code_last' in data){
                 code_last.value = data.code_last[0].code;
             }
-            //console.log(data);
+            
+            //console.log(data.patient.length);
+
+            if(data.patient.length > 1){
+                document.getElementById("div_beneficiarios").style.display = "block";
+                var inputquestion = document.getElementById('beneficiario_question');
+                
+                $(inputquestion).change(function(){
+                    if(inputquestion.value == 1){
+                        patient_id.value = "";
+                        name.value = "";
+                        lastname.value = "";
+                        contact.value = "";
+                        code_last.value = "";
+                        document.getElementById("div_select_beneficiarios").style.display = "block";
+                        select_beneficiarios = document.getElementById('beneficiarios');
+                        select_beneficiarios.innerHTML = "";
+                        select_beneficiarios.innerHTML += "<option value=\""+0+"\">Seleccione una opción</option>";
+                        for(var i=0; i< data.patient.length; i++){
+                            if(data.patient[i].type != 0){
+                                select_beneficiarios.innerHTML += "<option value=\""+data.patient[i].id+"-"+data.patient[i].name+"-"+data.patient[i].lastname+"-"+data.patient[i].contact+"\">"+data.patient[i].name+" "+data.patient[i].lastname+"</option>";
+                            }
+                        }
+
+                        $(select_beneficiarios).change(function(){
+                            console.log(select_beneficiarios.value);
+                            if(select_beneficiarios != 0){
+                                beneficiario_seleccionado = select_beneficiarios.value;
+                                informacion_beneficiario = beneficiario_seleccionado.split('-');
+                                //console.log(informacion_beneficiario[0]);
+                                patient_id.value = informacion_beneficiario[0];
+                                name.value = informacion_beneficiario[1];
+                                lastname.value = informacion_beneficiario[2];
+                                contact.value = informacion_beneficiario[3];
+                                if(select_beneficiarios != 0){
+                                    //var url = base + '/agem/public/admin/agem/api/load/add/patient/beneficiario/'+informacion_beneficiario[0]+'/'+exam;
+                                    var url = base + '/admin/agem/api/load/add/patient/beneficiario/'+informacion_beneficiario[0]+'/'+exam;
+                                    http.open('GET', url, true);
+                                    http.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+                                    http.send(); 
+                                    http.onreadystatechange = function(){
+                                        if(this.readyState == 4 && this.status == 200){
+                                            var data = this.responseText;
+                                            data = JSON.parse(data);
+
+                                            //console.log(data);
+                                            code_last.value = data.code_last[0].code;
+                                        }else{
+                                            code_last.value = "";
+                                        }
+                                    }
+                                }
+                            }else{
+                                patient_id.value = "";
+                                name.value = "";
+                                lastname.value = "";
+                                contact.value = "";
+                                code_last.value = "";
+                            }
+                        });
+                    }
+                    if(inputquestion.value == 0){
+                        document.getElementById("div_beneficiarios").style.display = "none";
+                        document.getElementById("div_select_beneficiarios").style.display = "none";
+                        patient_id.value = "";
+                        name.value = "";
+                        lastname.value = "";
+                        contact.value = "";
+                        code_last.value = "";
+
+                        if('patient' in data){
+                            patient_id.value = data.patient[0].id;
+                            name.value = data.patient[0].name;
+                            lastname.value = data.patient[0].lastname;
+                            contact.value = data.patient[0].contact;
+                        }  
+            
+                        if('code_last' in data){
+                            code_last.value = data.code_last[0].code;
+                        }
+                    }
+                    
+                    
+                });
+                
+            }
             
 
             var studies_actual = document.getElementById('studies_actual').value;
@@ -630,6 +724,46 @@ function setGenerateCode(){
     var nomenclature = document.getElementById('num_code_nom');
     var correlative = document.getElementById('num_code_cor');
     var year = document.getElementById('num_code_y');
+
+    http.open('GET', url, true);
+    http.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+    http.send();
+    http.onreadystatechange = function(){
+        if(this.readyState == 4 && this.status == 200){
+            var data = this.responseText;
+            data = JSON.parse(data);
+            num_code.value = data.code;
+            nomenclature.value = data.nomenclature;
+            correlative.value = data.correlative;
+            year.value = data.year;            
+        }
+    }
+}
+
+function setGenerateCodePatientActual(){
+    var area_exam = document.getElementById('exam_b');
+    var nomenclatura;
+    //console.log(area_exam.value);
+    
+    if(area_exam.value === '0'){
+        nomenclatura = "RX";
+    }else if(area_exam.value === '1'){
+        nomenclatura = "RX";
+    }else if(area_exam.value === '2'){
+        nomenclatura = "USG";
+    }else if(area_exam.value === '3'){
+        nomenclatura = "MMO";
+    }else if(area_exam.value === '4'){
+        nomenclatura = "DMO";
+    }        
+    //console.log(nomenclatura);
+    
+    //var url = base + '/agem/public/admin/agem/api/load/generate/code/'+nomenclatura;
+    var url = base + '/admin/agem/api/load/generate/code/'+nomenclatura;
+    var num_code = document.getElementById('numexpp');
+    var nomenclature = document.getElementById('num_code_nom_act');
+    var correlative = document.getElementById('num_code_cor_act');
+    var year = document.getElementById('num_code_y_act');
 
     http.open('GET', url, true);
     http.setRequestHeader('X-CSRF-TOKEN', csrfToken);

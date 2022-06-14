@@ -26,7 +26,6 @@ class AppointmentController extends Controller
         ];
 
         return view('admin.appointments.home',$data);
-        //return $data;
     }
 
     public function getAppointmentAdd(){
@@ -176,6 +175,8 @@ class AppointmentController extends Controller
 
                 $ca = ControlAppointment::where('date', $appointment->date)->count();
 
+
+
                 if($ca == 0):
                     $control = new ControlAppointment;
                     $control->date = $request->input('date');
@@ -218,6 +219,7 @@ class AppointmentController extends Controller
                     $control->save();
                 else:
                     $ca1 = ControlAppointment::where('date' , $request->input('date'))->get();
+                   
                     foreach($ca1 as $c):
                         if($area == 0 ):
                             $c->amount_rx = $c->amount_rx + 1;   
@@ -241,48 +243,44 @@ class AppointmentController extends Controller
 
                         elseif($area == 2):
                             
-                                $doppler = Studie::findOrFail($request->get('idstudy'));                    
-                                foreach($doppler as $d):
-                                    if($d->is_doppler == '1'):
-                                        $c->amount_usg_doppler = $c->amount_usg_doppler + 1;
-                                        if($request->input('schedule') >= 1 && $request->input('schedule') <= 10):
-                                            if($c->amount_usg_doppler_am == Config::get('agem.appo_usg_doppler_am')):
-                                                return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.')
-                                                    ->with('typealert', 'warning');                                
-                                            else:
-                                                $c->amount_usg_doppler_am = $c->amount_usg_doppler_am + 1;
-                                            endif;
-                                            
+                            $doppler = Studie::findOrFail($request->get('idstudy'));                    
+                            foreach($doppler as $d):
+                                if($d->is_doppler == '1'):
+                                    $c->amount_usg_doppler = $c->amount_usg_doppler + 1;
+                                    if($request->input('schedule') >= 1 && $request->input('schedule') <= 10):
+                                        if($c->amount_usg_doppler_am == 30):
+                                            return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.') 
+                                                ->with('typealert', 'warning');                                
                                         else:
-                                            if($c->amount_usg_doppler_pm == Config::get('agem.appo_usg_doppler_pm')):
-                                                return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.')
-                                                    ->with('typealert', 'warning');                                
-                                            else:
-                                                $c->amount_usg_doppler_pm = $c->amount_usg_doppler_pm + 1;
-                                            endif;
-                                            
+                                            $c->amount_usg_doppler_am = $c->amount_usg_doppler_am + 1;
+                                        endif;
+                                        
+                                    else:
+                                        if($c->amount_usg_doppler_pm == 30):
+                                            return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.') 
+                                                ->with('typealert', 'warning');                                
+                                        else:
+                                            $c->amount_usg_doppler_pm = $c->amount_usg_doppler_pm + 1;
+                                        endif;
+                                    endif;
+                                else:
+                                    if($request->input('schedule') >= 1 && $request->input('schedule') <= 10):
+                                        if($c->amount_usg_am == Config::get('agem.appo_usg_am')):
+                                            return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.') 
+                                                ->with('typealert', 'warning');                                
+                                        else:
+                                            $c->amount_usg_am = $c->amount_usg_am + 1;
                                         endif;
                                     else:
-                                        if($request->input('schedule') >= 1 && $request->input('schedule') <= 10):
-                                            if($c->amount_usg_am == 30):
-                                                return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.')
-                                                    ->with('typealert', 'warning');                                
-                                            else:
-                                                $c->amount_usg_am = $c->amount_usg_am + 1;
-                                            endif;
-                                            
+                                        if($c->amount_usg_pm == Config::get('agem.appo_usg_pm')):
+                                            return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.') 
+                                                ->with('typealert', 'warning');                                
                                         else:
-
-                                            if($c->amount_usg_pm == Config::get('agem.appo_usg_pm')):
-                                                return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.')
-                                                    ->with('typealert', 'warning');                                
-                                            else:
-                                                $c->amount_usg_pm = $c->amount_usg_pm + 1;
-                                            endif;
-                                            
+                                            $c->amount_usg_pm = $c->amount_usg_pm + 1;
                                         endif;
-                                    endif;                     
-                                endforeach;                          
+                                    endif;
+                                endif;                    
+                            endforeach;                
                         elseif($area == 3):
                             if($request->input('schedule') >= 1 && $request->input('schedule') <= 10):
                                 if($c->amount_mmo_am == Config::get('agem.appo_mmo_am')):
@@ -363,8 +361,30 @@ class AppointmentController extends Controller
                     $b->user_id = Auth::id();
                     $b->save();
 
-                    return redirect('/admin/citas')->with('messages', '¡Cita agendada y guardada con exito!.')
+                    if($request->input('present_patient') == '1'):
+                        $appointment_aux = Appointment::findOrFail($appointment->id);
+                        $appointment_aux->status = '1';  
+                        $hora = Carbon::now()->addHour(1)->format('H:i');              
+                        $appointment_aux->check_in = $hora;
+
+                        if(is_null($appointment_aux->num_study)):
+                        else:
+                            $appointment_aux->num_study = $request->input('numexpp');
+                            if($appointment_aux->save()):               
+
+                                $b = new Bitacora;
+                                $b->action = "Cita no. ".$appointment_aux->id.", paciente con afiliación ".$appointment_aux->patient->affiliation." presente";
+                                $b->user_id = Auth::id();
+                                $b->save();           
+                            endif;
+                        endif;
+
+                    endif;
+
+                    return back()->with('messages', '¡Cita agendada y guardada con exito!.')
                         ->with('typealert', 'success');
+
+                    
                 endif;
             else:
                 //return $request->all();
@@ -504,49 +524,39 @@ class AppointmentController extends Controller
                                 endif;     
 
                             elseif($area == 2):
-                                
+                                if($c->amount_usg == 10 || $c->amount_usg_doppler == 4 ):
+                                    return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.')
+                                            ->with('typealert', 'warning');
+                                else:
                                     $doppler = Studie::findOrFail($request->get('idstudy'));                    
                                     foreach($doppler as $d):
                                         if($d->is_doppler == '1'):
                                             $c->amount_usg_doppler = $c->amount_usg_doppler + 1;
                                             if($request->input('schedule') >= 1 && $request->input('schedule') <= 10):
-                                                if($c->amount_usg_doppler_am == Config::get('agem.appo_usg_doppler_am')):
-                                                    return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.')
+                                                if($c->amount_usg_doppler_am == 30):
+                                                    return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.') 
                                                         ->with('typealert', 'warning');                                
                                                 else:
                                                     $c->amount_usg_doppler_am = $c->amount_usg_doppler_am + 1;
                                                 endif;
                                                 
                                             else:
-                                                if($c->amount_usg_doppler_pm == Config::get('agem.appo_usg_doppler_pm')):
-                                                    return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.')
+                                                if($c->amount_usg_doppler_pm == 30):
+                                                    return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.') 
                                                         ->with('typealert', 'warning');                                
                                                 else:
                                                     $c->amount_usg_doppler_pm = $c->amount_usg_doppler_pm + 1;
                                                 endif;
-                                                
                                             endif;
                                         else:
                                             if($request->input('schedule') >= 1 && $request->input('schedule') <= 10):
-                                                if($c->amount_usg_am == 30):
-                                                    return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.')
-                                                        ->with('typealert', 'warning');                                
-                                                else:
-                                                    $c->amount_usg_am = $c->amount_usg_am + 1;
-                                                endif;
-                                                
+                                                $c->amount_usg_am = $c->amount_usg_am + 1;
                                             else:
-
-                                                if($c->amount_usg_pm == Config::get('agem.appo_usg_pm')):
-                                                    return back()->with('messages', '¡No se pueden agendar mas citas, espacios llenos!.')
-                                                        ->with('typealert', 'warning');                                
-                                                else:
-                                                    $c->amount_usg_pm = $c->amount_usg_pm + 1;
-                                                endif;
-                                                
+                                                $c->amount_usg_pm = $c->amount_usg_pm + 1;
                                             endif;
                                         endif;                    
-                                    endforeach;                         
+                                    endforeach;                            
+                                endif;                        
                             elseif($area == 3):
                                 if($request->input('schedule') >= 1 && $request->input('schedule') <= 10):
                                     if($c->amount_mmo_am == Config::get('agem.appo_mmo_am')):
@@ -619,7 +629,27 @@ class AppointmentController extends Controller
                         $b->user_id = Auth::id();
                         $b->save();
             
-                        return redirect('/admin/citas')->with('messages', '¡Cita agendada y guardada con exito!.')
+                        if($request->input('present_patient') == '1'):
+                            $appointment_aux = Appointment::findOrFail($appointment->id);
+                            $appointment_aux->status = '1';  
+                            $hora = Carbon::now()->addHour(1)->format('H:i');              
+                            $appointment_aux->check_in = $hora;    
+                            
+                            if(is_null($request->input('num_code_new'))):
+                                
+                            else:
+                                if($appointment_aux->save()):               
+    
+                                    $b = new Bitacora;
+                                    $b->action = "Cita no. ".$appointment_aux->id.", paciente con afiliación ".$appointment_aux->patient->affiliation." presente";
+                                    $b->user_id = Auth::id();
+                                    $b->save();           
+                                endif;
+                            endif;
+    
+                        endif;
+    
+                        return back()->with('messages', '¡Cita agendada y guardada con exito!.')
                             ->with('typealert', 'success');
                     endif;
 
