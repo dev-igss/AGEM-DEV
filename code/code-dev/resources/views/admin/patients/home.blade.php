@@ -115,21 +115,9 @@
                                 </td>
                                 <td>
                                     
-                                    @if($p->type == '1' || $p->type == '2')                                        
-                                        <span>
-                                            {{ getTypePatient(null, $p->type).': '.$p->affiliation}} <br>
-                                            <small>
-                                                <strong>AF. Principal: </strong> 
-                                                @if($p->affiliation_principal != NULL)
-                                                    {{ $p->affiliation_principal }}
-                                                @else
-                                                    {{ $p->parent->affiliation }}
-                                                @endif
-                                            </small>
-                                        </span>                                        
-                                    @else 
-                                        {{ getTypePatient(null, $p->type).': '.$p->affiliation}}
-                                    @endif
+                                    
+                                    {{ getTypePatient(null, $p->type).': '.$p->affiliation}}
+                                    
                                 </td>
                                 <td>{{ $p->lastname }}</td>
                                 <td>{{ $p->name }}</td>                                

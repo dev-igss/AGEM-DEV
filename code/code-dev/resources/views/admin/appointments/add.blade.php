@@ -127,7 +127,7 @@
                         </div>
 
                         <div class="input-group"> 
-                            <div id="div_manual_code_code" style="display: block; margin-top: 10px;">
+                            <div id="div_manual_code_code" style="display: none; margin-top: 10px;">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label for="ibm" class="mtop16"><strong> Nomenclatura:</strong></label>

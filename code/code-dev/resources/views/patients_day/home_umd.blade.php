@@ -5,7 +5,7 @@
     <div class="home_action_bar shadow">
         <div class="row"> 
             <div class="col-md-3">
-                <div class="categories">
+                <div class="categories" style="z-index: 999">
                     <a href="#"><i class="fas fa-stream"></i> Filtar</a>
                     <ul class="shadow">
                             <li>

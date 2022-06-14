@@ -108,7 +108,7 @@
                                 </td>
                                 <td> 
                                     {{ $a->patient->name.' '.$a->patient->lastname }} <br>
-                                    <span>AF. {{ $a->patient->affiliation }}</span> <br>                                    
+                                    <span>AF. {{ $a->patient->affiliation }}</span> <br>                                   
                                     <small>Expediente. {{ $a->num_study }}</small>
                                 </td>
                                 <td>
