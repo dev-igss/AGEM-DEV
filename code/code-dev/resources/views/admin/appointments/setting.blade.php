@@ -27,13 +27,13 @@
                                 <label for="name"><strong>Cantidad Citas A.M:</strong> </label>
                                 <div class="input-group">
                                     <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
-                                    {!! Form::text('appo_rx_special_am', Config::get('agem.appo_rx_special_am')  ,['class'=>'form-control', 'Placeholder' => 'Ingrese una nueva cantida']) !!}
+                                    {!! Form::text('amount_rx_special_am', $config->amount_rx_special_am  ,['class'=>'form-control', 'Placeholder' => 'Ingrese una nueva cantida']) !!}
                                 </div>
 
                                 <label for="name" class="mtop16"><strong>Cantidad Citas P.M:</strong> </label>
                                 <div class="input-group">
                                     <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
-                                    {!! Form::text('appo_rx_special_pm', Config::get('agem.appo_rx_special_pm')  ,['class'=>'form-control', 'Placeholder' => 'Ingrese una nueva cantida']) !!}
+                                    {!! Form::text('amount_rx_special_pm', $config->amount_rx_special_pm  ,['class'=>'form-control', 'Placeholder' => 'Ingrese una nueva cantida']) !!}
                                 </div>
                             </div>
                         </div>                        
@@ -53,13 +53,13 @@
                                 <label for="name"><strong>Cantidad Citas A.M:</strong> </label>
                                 <div class="input-group">
                                     <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
-                                    {!! Form::text('appo_usg_am', Config::get('agem.appo_usg_am')  ,['class'=>'form-control', 'Placeholder' => 'Ingrese una nueva cantida']) !!}
+                                    {!! Form::text('amount_usg_am', $config->amount_usg_am  ,['class'=>'form-control', 'Placeholder' => 'Ingrese una nueva cantida']) !!}
                                 </div>
 
                                 <label for="name" class="mtop16"><strong>Cantidad Citas P.M:</strong> </label>
                                 <div class="input-group">
                                     <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
-                                    {!! Form::text('appo_usg_pm', Config::get('agem.appo_usg_pm')  ,['class'=>'form-control', 'Placeholder' => 'Ingrese una nueva cantida']) !!}
+                                    {!! Form::text('amount_usg_pm', $config->amount_usg_pm  ,['class'=>'form-control', 'Placeholder' => 'Ingrese una nueva cantida']) !!}
                                 </div>
                             </div>
                         </div>       
@@ -69,13 +69,13 @@
                                 <label for="name" class="mtop16"><strong>Cantidad Citas A.M (DOPPLER):</strong> </label>
                                 <div class="input-group">
                                     <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
-                                    {!! Form::text('appo_usg_doopler_am', Config::get('agem.appo_usg_doopler_am')  ,['class'=>'form-control', 'Placeholder' => 'Ingrese una nueva cantida']) !!}
+                                    {!! Form::text('amount_usg_doppler_am', $config->amount_usg_doppler_am  ,['class'=>'form-control', 'Placeholder' => 'Ingrese una nueva cantida']) !!}
                                 </div>
 
                                 <label for="name" class="mtop16"><strong>Cantidad Citas P.M (DOPPLER):</strong> </label>
                                 <div class="input-group">
                                     <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
-                                    {!! Form::text('appo_usg_doopler_pm', Config::get('agem.appo_usg_doopler_pm')  ,['class'=>'form-control', 'Placeholder' => 'Ingrese una nueva cantida']) !!}
+                                    {!! Form::text('amount_usg_doppler_pm', $config->amount_usg_doppler_am  ,['class'=>'form-control', 'Placeholder' => 'Ingrese una nueva cantida']) !!}
                                 </div>
                             </div>
                         </div>                  
@@ -95,13 +95,13 @@
                                 <label for="name"><strong>Cantidad Citas A.M:</strong> </label>
                                 <div class="input-group">
                                     <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
-                                    {!! Form::text('appo_mmo_am', Config::get('agem.appo_mmo_am')  ,['class'=>'form-control', 'Placeholder' => 'Ingrese una nueva cantida']) !!}
+                                    {!! Form::text('amount_mmo_am', $config->amount_mmo_am ,['class'=>'form-control', 'Placeholder' => 'Ingrese una nueva cantida']) !!}
                                 </div>
 
                                 <label for="name" class="mtop16"><strong>Cantidad Citas P.M:</strong> </label>
                                 <div class="input-group">
                                     <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
-                                    {!! Form::text('appo_mmo_pm', Config::get('agem.appo_mmo_pm')  ,['class'=>'form-control', 'Placeholder' => 'Ingrese una nueva cantida']) !!}
+                                    {!! Form::text('amount_mmo_pm', $config->amount_mmo_pm  ,['class'=>'form-control', 'Placeholder' => 'Ingrese una nueva cantida']) !!}
                                 </div>
                             </div>
                         </div>                        
@@ -121,13 +121,13 @@
                                 <label for="name"><strong>Cantidad Citas A.M:</strong> </label>
                                 <div class="input-group">
                                     <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
-                                    {!! Form::text('appo_dmo_am', Config::get('agem.appo_dmo_am')  ,['class'=>'form-control', 'Placeholder' => 'Ingrese una nueva cantida']) !!}
+                                    {!! Form::text('amount_dmo_am', $config->amount_dmo_am  ,['class'=>'form-control', 'Placeholder' => 'Ingrese una nueva cantida']) !!}
                                 </div>
 
                                 <label for="name" class="mtop16"><strong>Cantidad Citas P.M:</strong> </label>
                                 <div class="input-group">
                                     <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
-                                    {!! Form::text('appo_dmo_pm', Config::get('agem.appo_dmo_pm')  ,['class'=>'form-control', 'Placeholder' => 'Ingrese una nueva cantida']) !!}
+                                    {!! Form::text('amount_dmo_pm', $config->amount_dmo_pm  ,['class'=>'form-control', 'Placeholder' => 'Ingrese una nueva cantida']) !!}
                                 </div>
                             </div>
                         </div>                        

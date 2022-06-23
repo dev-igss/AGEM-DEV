@@ -74,6 +74,11 @@
             <div class="header"> 
                 <h2 class="title"><i class="fas fa-users"></i> <strong>Listado de Pacientes</strong></h2>
                 <ul>
+                    @if(kvfj(Auth::user()->permissions, 'patient_setting'))
+                        <li>
+                            <a href="{{ url('/admin/paciente/configuracion') }}" ><i class="fa fa-cogs"></i> Configuración de Correlativos</a>
+                        </li>
+                    @endif
                     @if(kvfj(Auth::user()->permissions, 'patient_add'))
                         <li>
                             <a href="{{ url('/admin/paciente/agregar') }}" ><i class="fas fa-plus-circle"></i> Agregar Paciente</a>
@@ -111,13 +116,13 @@
                                         <!--@if($p->affiliation_principal != NULL)
                                             <a href="{{ url('/admin/paciente/'.$p->id.'/actualizar/afiliacion/principal/'.$p->affiliation_principal) }}" data-toogle="tooltrip" data-placement="top" title="Actualizar Afiliación Principal"><i class="fa fa-refresh"></i></a>
                                         @endif-->
+                                        @if(kvfj(Auth::user()->permissions, 'patient_delete'))                                            
+                                            <a href="#" data-action="borrar" data-path="admin/paciente" data-object="{{ $p->id }}" class="btn-deleted" data-toogle="tooltrip" data-placement="top" title="Borrar" ><i class="fa-solid fa-trash"></i></a>    
+                                        @endif
                                     </div>
                                 </td>
                                 <td>
-                                    
-                                    
-                                    {{ getTypePatient(null, $p->type).': '.$p->affiliation}}
-                                    
+                                    {{ getTypePatient(null, $p->type).': '.$p->affiliation}} 
                                 </td>
                                 <td>{{ $p->lastname }}</td>
                                 <td>{{ $p->name }}</td>                                

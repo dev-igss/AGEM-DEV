@@ -115,7 +115,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label for="ibm" class="mtop16"><strong> Nomenclatura:</strong></label>
-                                        {!! Form::text('num_rx_nom', null, ['class'=>'form-control', 'id' => 'pnum_rx_nom']) !!}
+                                        {!! Form::text('num_rx_nom', 'RX', ['class'=>'form-control', 'id' => 'pnum_rx_nom']) !!}
                                     </div>
 
                                     <div class="col-md-6"> 
@@ -149,7 +149,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label for="ibm" class="mtop16"><strong> Nomenclatura:</strong></label>
-                                        {!! Form::text('num_usg_nom', null, ['class'=>'form-control', 'id' => 'pnum_usg_nom']) !!}
+                                        {!! Form::text('num_usg_nom', 'USG', ['class'=>'form-control', 'id' => 'pnum_usg_nom']) !!}
                                     </div>
 
                                     <div class="col-md-6"> 
@@ -183,7 +183,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label for="ibm" class="mtop16"><strong> Nomenclatura:</strong></label>
-                                        {!! Form::text('num_mmo_nom', null, ['class'=>'form-control', 'id' => 'pnum_mmo_nom']) !!}
+                                        {!! Form::text('num_mmo_nom', 'MMO', ['class'=>'form-control', 'id' => 'pnum_mmo_nom']) !!}
                                     </div>
 
                                     <div class="col-md-6"> 
@@ -217,7 +217,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label for="ibm" class="mtop16"><strong> Nomenclatura:</strong></label>
-                                        {!! Form::text('num_dmo_nom', null, ['class'=>'form-control', 'id' => 'pnum_dmo_nom']) !!}
+                                        {!! Form::text('num_dmo_nom', 'DMO', ['class'=>'form-control', 'id' => 'pnum_dmo_nom']) !!}
                                     </div>
 
                                     <div class="col-md-6"> 

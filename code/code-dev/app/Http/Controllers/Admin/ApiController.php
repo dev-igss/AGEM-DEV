@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
-use App\Http\Models\Patient, App\Http\Models\CodePatient, App\Http\Models\Appointment, App\Http\Models\DetailAppointment, App\Http\Models\Service, App\Http\Models\Studie;
+use App\Http\Models\SettingHolyDays, App\Http\Models\Patient, App\Http\Models\CodePatient, App\Http\Models\Appointment, App\Http\Models\ControlAppointment, App\Http\Models\DetailAppointment, App\Http\Models\Service, App\Http\Models\Studie, App\Http\Models\Schedule;
 use Carbon\Carbon, DB;
 
 class ApiController extends Controller
@@ -234,10 +234,41 @@ class ApiController extends Controller
                     ->where('date', $date)
                     ->where('area', $area)
                     ->groupBy('schedule_id')
-                    ->get();
+                    ->get();       
+
+        //return $data;
 
         //return $cant_citas;
         return response()->json($cant_citas);
+    }
+
+    public function getStudiesControlDate($date){
+        $control_citas = ControlAppointment::where('date', $date)
+                    ->get();
+
+        //return $control_citas;
+       
+        return response()->json($control_citas);
+    }
+
+    public function getHolyDays($date){
+        $consulta_dia_festivo = SettingHolyDays::where('holy_day', $date)->get();
+
+        if(count($consulta_dia_festivo) == 1){
+            $dia_festivo = 1;
+        }else{
+            $dia_festivo = 0;
+        }
+
+        //return $dia_festivo;
+        return response()->json($dia_festivo);
+    }
+
+    public function getScheduleChange(){
+        $horarios = Schedule::all();
+
+        //return $cant_citas;
+        return response()->json($horarios);
     }
 
     public function getAppointmentsView(){

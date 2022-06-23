@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\Http\Models\Patient, App\Http\Models\Unit, App\Http\Models\CodePatient, App\Http\Models\Appointment, App\Http\Models\DetailAppointment, App\Http\Models\Bitacora;
+use App\Http\Models\Setting, App\Http\Models\Patient, App\Http\Models\Unit, App\Http\Models\CodePatient, App\Http\Models\Appointment, App\Http\Models\DetailAppointment, App\Http\Models\Bitacora;
 
 use App\Imports\importPatients;
 use Validator, Str, Config, Auth, Session, DB, Response;
@@ -185,6 +185,7 @@ class PatientController extends Controller
     public function getPatientAdd(){
 
         $units = Unit::all();
+        
 
         $data = [
             'units' => $units
@@ -625,15 +626,15 @@ class PatientController extends Controller
                             ->get();
         
         $appointments_usg = Appointment::where('patient_id', $id)
-                            ->where('area', '1')
+                            ->where('area', '2')
                             ->get();
     
         $appointments_mmo = Appointment::where('patient_id', $id)
-                            ->where('area', '2')
+                            ->where('area', '3')
                             ->get();
         
         $appointments_dmo = Appointment::where('patient_id', $id)
-                            ->where('area', '3')
+                            ->where('area', '4')
                             ->get();
 
         $details = DetailAppointment::all();
@@ -678,6 +679,50 @@ class PatientController extends Controller
         ];
 
         return view('admin.patients.history_code', $data);
+    }
+
+    public function getPatientDelete($id){
+        $patient = Patient::findOrFail($id);
+
+        if($patient->delete()):
+            $b = new Bitacora;
+            $b->action = "Se borro el registro del paciente con afiliación no. ".$patient->affiliation;
+            $b->user_id = Auth::id();
+            $b->save();
+
+            return back()->with('messages', '¡Paciente enviado a la papelera de reciclaje!.')
+                    ->with('typealert', 'success');
+        endif;
+    }
+
+    public function getConfigPatient(){
+        $id = '1';
+        $config = Setting::findOrFail($id);
+
+        $data = [
+            'config' => $config
+        ];
+
+        return view('admin.patients.setting', $data);
+    }
+
+    public function postConfigPatient(Request $request){
+        $id = '1';
+        $config_appo = Setting::findOrFail($id);
+        $config_appo->correlative_rx = $request->input('correlative_rx');
+        $config_appo->correlative_usg = $request->input('correlative_usg');
+        $config_appo->correlative_mmo = $request->input('correlative_mmo');
+        $config_appo->correlative_dmo = $request->input('correlative_dmo');
+
+        if($config_appo->save()):
+            $b = new Bitacora;
+            $b->action = "Cambios en configuración de Correlativos";
+            $b->user_id = Auth::id();
+            $b->save();
+
+            return back()->with('messages', '¡Configuraciones de correlativos actualizadas y guardadas con exito!.')
+                ->with('typealert', 'success');
+        endif;
     }
 
 

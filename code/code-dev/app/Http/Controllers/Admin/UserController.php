@@ -19,7 +19,8 @@ class UserController extends Controller
 
     public function getUsers(){
 
-        $users = User::all();
+        //$users = User::all();
+        $users = User::whereNotIn('role', [0])->get();
 
         $data = [
             'users' => $users,

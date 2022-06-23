@@ -146,18 +146,18 @@
                             <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
                             {!! Form::text('num_rx', null, ['class'=>'form-control', 'id' => 'pnum_rx']) !!} 
                             <a href="#" class="btn btn-sm btn-primary " id="btn_generate_code_rx" ><i class="fas fa-qrcode"></i> Actualizar</a>
-                            <a href="#" class="btn btn-sm btn-warning " id="btn_manual_code_rx" ><i class="fas fa-qrcode"></i> Actualización Manual</a>
+                            <a href="#" class="btn btn-sm btn-warning " id="btn_manual_code_rx" ><i class="fas fa-qrcode"></i> Act. Manual</a>
                             
                             <div id="div_manual_code_rx" style="display: none; margin-top: 10px;">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label for="ibm" class="mtop16"><strong><sup style="color: red;">(*)</sup> Nomenclatura:</strong></label>
-                                        {!! Form::text('num_rx_nom', null, ['class'=>'form-control', 'id' => 'pnum_rx_nom']) !!}
+                                        {!! Form::text('num_rx_nom', 'RX', ['class'=>'form-control ', 'id' => 'pnum_rx_nom']) !!}
                                     </div>
 
                                     <div class="col-md-6"> 
                                         <label for="ibm" class="mtop16"><strong><sup style="color: red;">(*)</sup> Correlativo:</strong></label>
-                                        {!! Form::text('num_rx_cor', null, ['class'=>'form-control', 'id' => 'pnum_rx_cor']) !!} 
+                                        {!! Form::text('num_rx_cor', null, ['class'=>'form-control ', 'id' => 'pnum_rx_cor']) !!} 
                                     </div>                                    
                                 </div>
 
@@ -176,13 +176,13 @@
                             <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
                             {!! Form::text('num_usg', null, ['class'=>'form-control', 'id' => 'pnum_usg']) !!} 
                             <a href="#" class="btn btn-sm btn-primary " id="btn_generate_code_usg" ><i class="fas fa-qrcode"></i> Actualizar</a>
-                            <a href="#" class="btn btn-sm btn-warning " id="btn_manual_code_usg" ><i class="fas fa-qrcode"></i> Actualización Manual</a>
+                            <a href="#" class="btn btn-sm btn-warning " id="btn_manual_code_usg" ><i class="fas fa-qrcode"></i> Act. Manual</a>
                             
                             <div id="div_manual_code_usg" style="display: none; margin-top: 10px;">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label for="ibm" class="mtop16"><strong><sup style="color: red;">(*)</sup> Nomenclatura:</strong></label>
-                                        {!! Form::text('num_usg_nom', null, ['class'=>'form-control', 'id' => 'pnum_usg_nom']) !!}
+                                        {!! Form::text('num_usg_nom', 'USG', ['class'=>'form-control', 'id' => 'pnum_usg_nom']) !!}
                                     </div>
 
                                     <div class="col-md-6"> 
@@ -206,13 +206,13 @@
                             <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
                             {!! Form::text('num_mmo', null, ['class'=>'form-control', 'id' => 'pnum_mmo']) !!} 
                             <a href="#" class="btn btn-sm btn-primary " id="btn_generate_code_mmo" ><i class="fas fa-qrcode"></i> Actualizar</a>
-                            <a href="#" class="btn btn-sm btn-warning " id="btn_manual_code_mmo" ><i class="fas fa-qrcode"></i> Actualización Manual</a>
+                            <a href="#" class="btn btn-sm btn-warning " id="btn_manual_code_mmo" ><i class="fas fa-qrcode"></i> Act. Manual</a>
                             
                             <div id="div_manual_code_mmo" style="display: none; margin-top: 10px;">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label for="ibm" class="mtop16"><strong><sup style="color: red;">(*)</sup> Nomenclatura:</strong></label>
-                                        {!! Form::text('num_mmo_nom', null, ['class'=>'form-control', 'id' => 'pnum_mmo_nom']) !!}
+                                        {!! Form::text('num_mmo_nom', 'MMO', ['class'=>'form-control', 'id' => 'pnum_mmo_nom']) !!}
                                     </div>
 
                                     <div class="col-md-6"> 
@@ -236,13 +236,13 @@
                             <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
                             {!! Form::text('num_dmo', null, ['class'=>'form-control', 'id' => 'pnum_dmo']) !!} 
                             <a href="#" class="btn btn-sm btn-primary " id="btn_generate_code_dmo" ><i class="fas fa-qrcode"></i> Actualizar</a>
-                            <a href="#" class="btn btn-sm btn-warning " id="btn_manual_code_dmo" ><i class="fas fa-qrcode"></i> Actualización Manual</a>
+                            <a href="#" class="btn btn-sm btn-warning " id="btn_manual_code_dmo" ><i class="fas fa-qrcode"></i> Act. Manual</a>
                             
                             <div id="div_manual_code_dmo" style="display: none; margin-top: 10px;">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label for="ibm" class="mtop16"><strong><sup style="color: red;">(*)</sup> Nomenclatura:</strong></label>
-                                        {!! Form::text('num_dmo_nom', null, ['class'=>'form-control', 'id' => 'pnum_dmo_nom']) !!}
+                                        {!! Form::text('num_dmo_nom', 'DMO', ['class'=>'form-control', 'id' => 'pnum_dmo_nom']) !!}
                                     </div>
 
                                     <div class="col-md-6"> 

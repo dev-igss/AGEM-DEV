@@ -12,8 +12,24 @@
 
 @section('content')
     <div class="container-fluid">
+        <div id="alert-dia-festivo" class="row" style="text-align: center; color: red; display: none;">
+            <div class="col-md-12 d-flex">
+                <div class="panel shadow">
+                    <!-- Modal -->
+
+                    <div class="header" >
+                        <h2 class="title"><i class="fa-solid fa-triangle-exclamation"></i><strong> Información Paciente</strong></h2>
+                    </div>
+
+                    <div class="inside">
+                        <h3>¡Día festivo, solo puede registrar estudio para las áreas de emergencia y hospitalización!</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         {!! Form::open(['url'=>'/admin/cita/agregar']) !!}
-        <div class="row">
+        <div class="row mtop16">
             <div class="col-md-4 d-flex">
                 <div class="panel shadow">
                     <!-- Modal -->
@@ -81,10 +97,11 @@
                             <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
                             {!! Form::text('numexpp', null, ['class'=>'form-control', 'id' => 'numexpp', 'readonly']) !!}
                             <a href="#" class="btn btn-sm btn-primary " id="btn_generate_code_patient_actual" ><i class="fas fa-qrcode"></i> Generar</a>
+                            <a href="#" class="btn btn-sm btn-warning " id="btn_manual_code_patient_actual" ><i class="fas fa-qrcode"></i> Manual</a>
                         </div>
 
                         <div class="input-group"> 
-                            <div id="div_manual_code_code" style="display: none; margin-top: 10px;">
+                            <div id="div_manual_code_patient_actual" style="display: none; margin-top: 10px;">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label for="ibm" class="mtop16"><strong> Nomenclatura:</strong></label>
@@ -170,10 +187,11 @@
                             <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
                             {!! Form::text('num_code_new', null, ['class'=>'form-control', 'id' => 'num_code_new']) !!}
                             <a href="#" class="btn btn-sm btn-primary " id="btn_generate_code" ><i class="fas fa-qrcode"></i> Generar</a>
+                            <a href="#" class="btn btn-sm btn-warning " id="btn_manual_code" ><i class="fas fa-qrcode"></i> Manual</a>
                         </div>
 
                         <div class="input-group"> 
-                            <div id="div_manual_code_code" style="display: none; margin-top: 10px;">
+                            <div id="div_manual_code_new" style="display: none; margin-top: 10px;">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label for="ibm" class="mtop16"><strong> Nomenclatura:</strong></label>
@@ -204,6 +222,8 @@
 
                 </div>
             </div>
+
+            
 
             <!--<div class="col-md-4 d-flex"> 
                 <div class="panel shadow">
@@ -270,8 +290,21 @@
                             {!! Form::date('date', null, ['class'=>'form-control', 'id' => 'date_new_app']) !!}
                         </div>
 
-                        {!! Form::hidden('citas_configuradas', Config::get('agem.citas_configuradas'), ['id' => 'citas_configuradas']) !!}
-                        <label for="name" class="mtop16"><strong>Horarios de Atención:</strong></label>
+                        <div class="citas_agendadas" style="display: block; margin-top: 10px;">
+                            <label for="name" class="mtop16"><strong> Control de Citas del Día Seleccionado:</strong></label>
+                            <div class="input-group">
+                                <span class="input-group-text" id="basic-addon1">AM</span>
+                                {!! Form::text('control_am', null, ['class'=>'form-control col-md-4', 'rows' => '1', 'id'=>'control_am', 'readonly']) !!}
+                                &emsp;&emsp;&emsp;&emsp;&emsp;
+                                <span class="input-group-text" id="basic-addon1">PM</span>
+                                {!! Form::text('control_pm', null, ['class'=>'form-control col-md-4', 'rows' => '1', 'id'=>'control_pm', 'readonly']) !!}
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        {!! Form::hidden('citas_configuradas', $setting_x_hour, ['id' => 'citas_configuradas']) !!}
+                        <label for="name" ><strong>Horarios de Atención:</strong></label>
                         <div class="input-group">
                             <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
                             <select name="schedule" id="schedules" style="width: 88%" >
@@ -319,7 +352,8 @@
                 </div>
             </div>
         </div>
-        
+
+                
         <div class="row mtop16">
             <div class="col-md-12">
                 <div class="panel shadow">

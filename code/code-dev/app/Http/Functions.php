@@ -78,7 +78,7 @@
             '0' => 'AF',
             '1' => 'BE',
             '2' => 'BH',
-            '3' => 'JB',
+            '3' => 'JB',            
             '4' => 'NA',
             '5' => 'PI',
             '6' => 'CS'
@@ -259,7 +259,9 @@
                     'patient_add' => 'Puede agregar pacientes.',
                     'patient_edit' => 'Puede editar pacientes.',
                     'patient_edit_affiliation' => 'Puede editar la afiliación de los pacientes.',
-                    'patient_history_exam' => 'Puede ver el historial de citas de pacientes.'
+                    'patient_delete' => 'Puede borrar pacientes.',
+                    'patient_history_exam' => 'Puede ver el historial de citas de pacientes.',
+                    'patient_setting' => 'Puede modificar la configuración de los correlativos de expedientes.'
                 ]
             ],
 

@@ -14,29 +14,12 @@
             <div class="header">
                 <h2 class="title"><i class="fas fa-calendar-alt"></i><strong> Listado de Citas</strong> </h2>
                 <ul>
-                    
-                    <ul>
-                        <li>
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                        <i class="fa-solid fa-filter"></i>  Filtrado Estados <span class="caret"></span>
-                                </button>
-
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="{{ url('/admin/cita/calendario/rx') }}">Agendada</a></li>
-                                    <li><a href="{{ url('/admin/cita/calendario/umd') }}"> En Atención</a></li>
-                                    <li><a href="{{ url('/admin/cita/calendario') }}"> Reprogramada</a></li>
-                                    <li><a href="{{ url('/admin/cita/calendario') }}"> Ausente</a></li>
-                                    <li><a href="{{ url('/admin/cita/calendario') }}"> Finalizada</a></li>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
                     @if(kvfj(Auth::user()->permissions, 'appointment_calendar')) 
                         <ul>
                             <li>
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <button type="button" class="btn btn-default dropdown-toggle"
+                                            data-toggle="dropdown">
                                             <i class="fa fa-calendar"></i>  Ver Calendario <span class="caret"></span>
                                     </button>
 
@@ -48,11 +31,6 @@
                                 </div>
                             </li>
                         </ul>
-                    @endif
-                    @if(kvfj(Auth::user()->permissions, 'appointment_setting'))
-                        <li>
-                            <a href="{{ url('/admin/cita/configuracion/dias/festivos') }}" ><i class="fa-solid fa-calendar-day"></i> Días Festivos</a>
-                        </li>
                     @endif
                     @if(kvfj(Auth::user()->permissions, 'appointment_setting'))
                         <li>
@@ -70,23 +48,24 @@
 
             <div class="inside">  
                     {!! Form::open(['url' => '/admin/cita/busqueda']) !!}
-                        <div class="row" >
+                        <div class="row">
                             <div class="col-md-5" >                                
                                 <div class="input-group">
-                                    {!! Form::date('search_date', null, ['class'=>'form-control', 'placeholder' => 'Realice una busqueda fecha']) !!}
+                                    {!! Form::date('search_date', $fecha, ['class'=>'form-control', 'placeholder' => 'Realice una busqueda fecha']) !!}
                                 </div>                                
                             </div>
 
                             <div class="col-md-5" >                                
                                 <div class="input-group">
-                                    {!! Form::select('type_patient', getTypePatient('list', null),0,['class'=>'form-select col-md-2', 'id'=> 'patient_type' ]) !!}
-                                    {!! Form::text('search_patient', null, ['class' => 'form-control', 'placeholder' => 'Realice una busqueda por paciente']) !!}        
+                                    {!! Form::select('type_patient', getTypePatient('list', null),$tipo_paciente,['class'=>'form-select col-md-2', 'id'=> 'patient_type' ]) !!}
+                                    {!! Form::text('search_patient', $paciente, ['class' => 'form-control', 'placeholder' => 'Realice una busqueda por paciente']) !!}        
                                 </div>                                
                             </div>
 
-                            <div class="col-md-2" style="margin-right: -100px;">                                
+                            <div class="col-md-2" >                                
                                 <div class="input-group">
-                                    {!! Form::submit('Buscar', ['class'=>'btn btn-primary']) !!}                                        
+                                    {!! Form::submit('Buscar', ['class'=>'btn btn-primary']) !!}     
+                                    <a href="{{ url('/admin/citas') }}" class="btn btn-warning">Limpiar</a>                                   
                                 </div>                                
                             </div>
                         </div>
