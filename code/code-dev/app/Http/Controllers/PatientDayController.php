@@ -107,7 +107,7 @@ class PatientDayController extends Controller
 
         $cita = Appointment::findOrFail($request->get('appointmentid'));
         $cita->status = '3';
-        $hora = Carbon::now()->addHours(1)->addMinutes(10)->format('H:i');
+        $hora = Carbon::now()->addHours(1)->addMinutes(20)->format('H:i');
         $cita->check_out = $hora;
         $cita->ibm_tecnico_1 = $id_tec1;
         $area_temp = $cita->area;
@@ -147,7 +147,7 @@ class PatientDayController extends Controller
                 return redirect('/citas_del_dia_rx')->with('messages', '¡Registro de Materiales Exitos!.')
                     ->with('typealert', 'success');
             else:
-                return redirect('/citas_del_dia_umd')->with('messages', '¡Registro de Materiales Exitos!.')
+                return redirect('/citas_del_dia_umd/todas')->with('messages', '¡Registro de Materiales Exitos!.')
                     ->with('typealert', 'success');
             endif;
 
@@ -178,7 +178,7 @@ class PatientDayController extends Controller
                 return redirect('/citas_del_dia_rx')->with('messages', '¡Acción realizada con exito!.')
                     ->with('typealert', 'success');
             else:
-                return redirect('/citas_del_dia_umd')->with('messages', '¡Acción realizada con exito!.')
+                return redirect('/citas_del_dia_umd/todas')->with('messages', '¡Acción realizada con exito!.')
                     ->with('typealert', 'success');
             endif;
 
@@ -198,7 +198,7 @@ class PatientDayController extends Controller
                 return redirect('/citas_del_dia_rx')->with('messages', '¡Acción realizada con exito!.')
                     ->with('typealert', 'success');
             else:
-                return redirect('/citas_del_dia_umd')->with('messages', '¡Acción realizada con exito!.')
+                return redirect('/citas_del_dia_umd/todas')->with('messages', '¡Acción realizada con exito!.')
                     ->with('typealert', 'success');
             endif;
 

@@ -482,6 +482,30 @@ function setInfoAddPatient(){
                 document.getElementById("patient_msg").style.display = "block";
                 document.getElementById("register").style.display = "block";
                 document.getElementById("register").classList.add("d-flex");
+                var studies_actual = document.getElementById('studies_actual').value;
+                select = document.getElementById('studies');
+                select.innerHTML = "";
+                //var url = base + '/agem/public/admin/agem/api/load/studies/'+exam;
+                var url = base + '/admin/agem/api/load/studies/'+exam;
+                http.open('GET', url, true);
+                http.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+                http.send();
+                http.onreadystatechange = function(){
+                    if(this.readyState == 4 && this.status == 200){
+                        var data = this.responseText;
+                        data = JSON.parse(data);
+                        data.forEach( function(element){
+                            if(studies_actual == element.id){
+                                select.innerHTML += "<option value=\""+element.id+"\" selected>"+element.name+"</option>";
+                            }else{
+                                select.innerHTML += "<option value=\""+element.id+"\">"+element.name+"</option>";
+                            }
+                        });
+
+                        
+
+                    }
+                }
             }  
 
             if('code_last' in data){
@@ -571,8 +595,37 @@ function setInfoAddPatient(){
                     
                     
                 });
+
+                
+
+                var studies_actual = document.getElementById('studies_actual').value;
+                select = document.getElementById('studies');
+                select.innerHTML = "";
+                var url = base + '/agem/public/admin/agem/api/load/studies/'+exam;
+                //var url = base + 'admin/agem/api/load/studies/'+exam;
+                http.open('GET', url, true);
+                http.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+                http.send();
+                http.onreadystatechange = function(){
+                if(this.readyState == 4 && this.status == 200){
+                    var data = this.responseText;
+                    data = JSON.parse(data);
+                    data.forEach( function(element){
+                        if(studies_actual == element.id){
+                            select.innerHTML += "<option value=\""+element.id+"\" selected>"+element.name+"</option>";
+                        }else{
+                            select.innerHTML += "<option value=\""+element.id+"\">"+element.name+"</option>";
+                        }
+                    });
+
+                    
+
+                }
+            }
                 
             }
+
+            
             
 
             var studies_actual = document.getElementById('studies_actual').value;

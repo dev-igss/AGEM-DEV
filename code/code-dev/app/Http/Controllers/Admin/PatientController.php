@@ -433,7 +433,7 @@ class PatientController extends Controller
                     endif;
                 endif;
             endif;
-
+            $p->type = $request->input('type_patient');
             $p->name = e($request->input('name'));
             $p->lastname = e($request->input('lastname'));
             $p->gender = $request->input('gender');

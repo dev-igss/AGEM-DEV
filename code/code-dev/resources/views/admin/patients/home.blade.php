@@ -108,9 +108,9 @@
                                         @if(kvfj(Auth::user()->permissions, 'patient_edit'))
                                             <a href="{{ url('/admin/paciente/'.$p->id.'/historial_codigos_expedientes') }}" data-toogle="tooltrip" data-placement="top" title="Historial de Codigos"><i class="fas fa-list"></i></a>
                                         @endif
-                                        @if($p->affiliation_principal != NULL)
+                                        <!--@if($p->affiliation_principal != NULL)
                                             <a href="{{ url('/admin/paciente/'.$p->id.'/actualizar/afiliacion/principal/'.$p->affiliation_principal) }}" data-toogle="tooltrip" data-placement="top" title="Actualizar Afiliación Principal"><i class="fa fa-refresh"></i></a>
-                                        @endif
+                                        @endif-->
                                     </div>
                                 </td>
                                 <td>
