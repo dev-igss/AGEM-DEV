@@ -18,7 +18,7 @@
                     <!-- Modal -->
 
                     <div class="header" >
-                        <h2 class="title"><i class="fa-solid fa-triangle-exclamation"></i><strong> Información Paciente</strong></h2>
+                        <h2 class="title"><i class="fa-solid fa-triangle-exclamation"></i><strong> Advertencia</strong></h2>
                     </div>
 
                     <div class="inside">
@@ -120,7 +120,6 @@
                                         {!! Form::text('num_code_y_act', null, ['class'=>'form-control', 'id' => 'num_code_y_act']) !!} 
                                     </div>
                                 </div>
-                                <hr>
                             </div>
                             
                         </div>
@@ -210,13 +209,12 @@
                                         {!! Form::text('num_code_y', null, ['class'=>'form-control', 'id' => 'num_code_y']) !!} 
                                     </div>
                                 </div>
-                                <hr>
                             </div>
                             
                         </div>
 
                         
-                    
+                     
                         
                     </div>
 
@@ -225,39 +223,16 @@
 
             
 
-            <!--<div class="col-md-4 d-flex"> 
+            <div class="col-md-4" id="estudios_paciente" style="display: none;"> 
                 <div class="panel shadow">
                     <div class="header">
-                        <h2 class="title"><i class="fas fa-calendar-alt"></i><strong> Ultimo Examen Realizado</strong></h2>
+                        <h2 class="title"><i class="fas fa-calendar-alt"></i><strong> Estudios del Paciente</strong></h2>
                     </div>
 
-                    <div class="inside"> 
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <label for="name" ><strong> Fecha de Cita:</strong></label>
-                                <div class="input-group">
-                                    <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
-                                    {!! Form::text('date_al', null, ['class'=>'form-control', 'id' => 'date_al', 'readonly']) !!} 
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-12">
-                                <label for="name"><strong> Numero de Expediente:</strong></label>
-                                <div class="input-group">
-                                    <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
-                                    {!! Form::text('numexp_al', null, ['class'=>'form-control', 'id' => 'numexp_al', 'readonly']) !!}
-                                </div>
-                            </div>
-
-                        </div>
-                        
-                        
-
-                        <label for="name" class="mtop16"><strong> Detalle de la Cita:</strong></label>
+                    <div class="inside">                      
                         <table id="detalles1" class= "table table-striped table-bordered table-condensed table-hover">
                             <thead style="background-color: #c3f3ea">
-                                <th><strong> SERVICIO SOLICITANTE </strong></th>
+                                <th><strong> FECHA </strong></th>
                                 <th><strong> ESTUDIO </strong></th>
                             </thead>
                             <tbody>
@@ -267,17 +242,23 @@
                         </table> 
 
 
-                        <label class="mtop16" style="color: red; font-size: 1.5em; margin-left: 50px; font-weight: bold; display: none;" id="appointment_msg" >¡No se encontraron citas previas!</label>
+                        <label class="mtop16" style="color: red; font-size: 1.5em; margin-left: 80px; font-weight: bold; display: none;" id="appointment_msg" >¡No se encontraron estudios en esta especialidad!</label>
 
 
                         
                     </div>
 
                 </div>
-            </div> -->
+            </div> 
 
-            <div class="col-md-4 d-flex">
+            
+        </div>
+
+                
+        <div class="row mtop16">
+            <div class="col-md-4">
                 <div class="panel shadow">
+
                     <div class="header">
                         <h2 class="title"><i class="fas fa-calendar-plus"></i><strong> Información Para Cita Nueva</strong></h2>
                     </div>
@@ -287,24 +268,79 @@
                         <label for="name"><strong>Fecha a Agendar:</strong></label>
                         <div class="input-group">
                             <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
-                            {!! Form::date('date', null, ['class'=>'form-control', 'id' => 'date_new_app']) !!}
+                            {!! Form::date('date', null, ['class'=>'form-control', 'id' => 'date_new_app', 'required']) !!}
+                            <!--<a href="#" class="btn btn-sm btn-info " id="bt_ver_citas" ><i class="fa-solid fa-calendar-day"></i> Ver C.C</a>-->
                         </div>
 
-                        <div class="citas_agendadas" style="display: block; margin-top: 10px;">
-                            <label for="name" class="mtop16"><strong> Control de Citas del Día Seleccionado:</strong></label>
-                            <div class="input-group">
-                                <span class="input-group-text" id="basic-addon1">AM</span>
-                                {!! Form::text('control_am', null, ['class'=>'form-control col-md-4', 'rows' => '1', 'id'=>'control_am', 'readonly']) !!}
-                                &emsp;&emsp;&emsp;&emsp;&emsp;
-                                <span class="input-group-text" id="basic-addon1">PM</span>
-                                {!! Form::text('control_pm', null, ['class'=>'form-control col-md-4', 'rows' => '1', 'id'=>'control_pm', 'readonly']) !!}
+                        <div id="alert-control-citas" class="row mtop16" style="display: none;">
+                            <div class="col-md-12 d-flex">
+                                <div class="panel shadow">
+                                    <!-- Modal -->
+
+                                    <div class="header" >
+                                        <h2 class="title"><i class="fa-solid fa-calendar-day"></i><strong> Listado de Citas Agendadas Este Día</strong></h2>
+                                    </div>
+
+                                    <div class="inside">
+                                        <div id="citas_agendadas_rx" style="display: none;">
+                                            <label for="name" ><strong> Control de Citas RX:</strong></label>
+                                            <div class="input-group">
+                                                <span class="input-group-text" id="basic-addon1">AM</span>
+                                                {!! Form::text('control_rx_am', null, ['class'=>'form-control col-md-4', 'rows' => '1', 'id'=>'control_rx_am', 'readonly']) !!}
+                                                &emsp;&emsp;&emsp;&emsp;&emsp;
+                                                <span class="input-group-text" id="basic-addon1">PM</span>
+                                                {!! Form::text('control_rx_pm', null, ['class'=>'form-control col-md-4', 'rows' => '1', 'id'=>'control_rx_pm', 'readonly']) !!}
+                                            </div>
+                                        </div>
+
+                                        <div id="citas_agendadas_usg" style="display: none;">
+                                            <label for="name" ><strong> Control de Citas USG:</strong></label>
+                                            <div class="input-group">
+                                                <span class="input-group-text" id="basic-addon1">AM</span>
+                                                {!! Form::text('control_usg_am', null, ['class'=>'form-control col-md-4', 'rows' => '1', 'id'=>'control_usg_am', 'readonly']) !!}
+                                                &emsp;&emsp;&emsp;&emsp;&emsp;
+                                                <span class="input-group-text" id="basic-addon1">PM</span>
+                                                {!! Form::text('control_usg_pm', null, ['class'=>'form-control col-md-4', 'rows' => '1', 'id'=>'control_usg_pm', 'readonly']) !!}
+                                            </div>
+
+                                            <label for="name" class="mtop16"><strong> Control de Citas USG Doppler:</strong></label>
+                                            <div class="input-group">
+                                                <span class="input-group-text" id="basic-addon1">AM</span>
+                                                {!! Form::text('control_usg_doppler_am', null, ['class'=>'form-control col-md-4', 'rows' => '1', 'id'=>'control_usg_doppler_am', 'readonly']) !!}
+                                                &emsp;&emsp;&emsp;&emsp;&emsp;
+                                                <span class="input-group-text" id="basic-addon1">PM</span>
+                                                {!! Form::text('control_usg_doppler_pm', null, ['class'=>'form-control col-md-4', 'rows' => '1', 'id'=>'control_usg_doppler_pm', 'readonly']) !!}
+                                            </div>
+                                        </div>
+
+                                        <div id="citas_agendadas_mmo" style="display: none;">
+                                            <label for="name" ><strong> Control de Citas MMO:</strong></label>
+                                            <div class="input-group">
+                                                <span class="input-group-text" id="basic-addon1">AM</span>
+                                                {!! Form::text('control_mmo_am', null, ['class'=>'form-control col-md-4', 'rows' => '1', 'id'=>'control_mmo_am', 'readonly']) !!}
+                                                &emsp;&emsp;&emsp;&emsp;&emsp;
+                                                <span class="input-group-text" id="basic-addon1">PM</span>
+                                                {!! Form::text('control_mmo_pm', null, ['class'=>'form-control col-md-4', 'rows' => '1', 'id'=>'control_mmo_pm', 'readonly']) !!}
+                                            </div>
+                                        </div>
+
+                                        <div id="citas_agendadas_dmo" style="display: none;">
+                                            <label for="name" ><strong> Control de Citas DMO:</strong></label>
+                                            <div class="input-group">
+                                                <span class="input-group-text" id="basic-addon1">AM</span>
+                                                {!! Form::text('control_dmo_am', null, ['class'=>'form-control col-md-4', 'rows' => '1', 'id'=>'control_dmo_am', 'readonly']) !!}
+                                                &emsp;&emsp;&emsp;&emsp;&emsp;
+                                                <span class="input-group-text" id="basic-addon1">PM</span>
+                                                {!! Form::text('control_dmo_pm', null, ['class'=>'form-control col-md-4', 'rows' => '1', 'id'=>'control_dmo_pm', 'readonly']) !!}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <hr>
-
                         {!! Form::hidden('citas_configuradas', $setting_x_hour, ['id' => 'citas_configuradas']) !!}
-                        <label for="name" ><strong>Horarios de Atención:</strong></label>
+                        <label for="name" class="mtop16"><strong>Horarios de Atención:</strong></label>
                         <div class="input-group">
                             <span class="input-group-text" id="basic-addon1"><i class="fas fa-keyboard"></i></span>
                             <select name="schedule" id="schedules" style="width: 88%" >
@@ -351,11 +387,9 @@
                     </div>
                 </div>
             </div>
-        </div>
 
-                
-        <div class="row mtop16">
-            <div class="col-md-12">
+
+            <div class="col-md-8">
                 <div class="panel shadow">
                     <div class="header">
                         <h2 class="title"><i class="fas fa-calendar-plus"></i><strong> Detalle de Estudio(s) a Realizar</strong></h2>
@@ -379,19 +413,17 @@
                         </div>
 
                     </div>
-                </div>                    
-            </div>
-        </div>
-
-        <div class="row mtop16">
-            <div class="col-md-12">
-                <div class="panel shadow">
+                </div>          
+                
+                <div class="panel shadow mtop16">
                     <div class="inside">
                         {!! Form::submit('Guardar', ['class'=>'btn btn-success', 'id'=>'btn_guardar']) !!}
                     </div>
-                </div>                    
+                </div>                 
             </div>
         </div>
+
+        
         {!! Form::close() !!}
     </div>
 
@@ -399,6 +431,7 @@
     <script>
        
         var modal = document.getElementById('modelId');
+        var modalVerCitas = document.getElementById('modalVerCitas');
         $("#btn_guardar").hide();
         var cont = 0;
 
@@ -422,6 +455,7 @@
 
 
 
+
             $('#btn_agregar').click(function(){
                 agregar_tabla();
             });
@@ -437,6 +471,14 @@
             });
             $('#bt_closeModal').click(function(){
                 $('#modelId').modal("hide");
+            });
+
+            $('#bt_ver_citas').click(function(){
+                $('#modalVerCitas').modal("show");
+            });
+
+            $('#bt_cerrar_ver_citas').click(function(){
+                $('#modalVerCitas').modal("hide");
             });
         });
 

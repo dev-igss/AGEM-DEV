@@ -23,8 +23,8 @@ class PatientController extends Controller
 
         switch ($filtrado) {
 
-            case 'todos':
-                $patients = Patient::with(['parent'])->orderBy('name', 'Asc')->get();  
+            case 'inicio':
+                $patients = Patient::where('id',0)->get();  
             break;
     
             case 'a':
@@ -137,6 +137,10 @@ class PatientController extends Controller
     
             case 'z':
                 $patients = Patient::with(['parent'])->where('lastname','LIKE',$filtrado.'%')->orderBy('lastname', 'Asc')->get();
+            break;
+
+            case 'borrados':
+                $patients = Patient::onlyTrashed()->get();  
             break;
         }
 
@@ -684,13 +688,37 @@ class PatientController extends Controller
     public function getPatientDelete($id){
         $patient = Patient::findOrFail($id);
 
-        if($patient->delete()):
+        $citas = Appointment::where('patient_id', $id)->get();
+
+        if(count($citas) > 0):
+            return back()->with('messages', '¡No puede eliminar este paciente porque tiene citas registradas!.')
+                        ->with('typealert', 'danger');
+        else:
+            if($patient->delete()):
+                $b = new Bitacora;
+                $b->action = "Se borro el registro del paciente con afiliación no. ".$patient->affiliation;
+                $b->user_id = Auth::id();
+                $b->save();
+    
+                return back()->with('messages', '¡Paciente enviado a la papelera de reciclaje!.')
+                        ->with('typealert', 'success');
+            endif;
+
+        endif;
+
+        
+    }
+
+    public function getPatientRestore($id){
+        $patient = Patient::findOrFail($id);
+        return $patient;
+        if($patient->restore()):
             $b = new Bitacora;
-            $b->action = "Se borro el registro del paciente con afiliación no. ".$patient->affiliation;
+            $b->action = "Se restauro el registro del paciente con afiliación no. ".$patient->affiliation;
             $b->user_id = Auth::id();
             $b->save();
 
-            return back()->with('messages', '¡Paciente enviado a la papelera de reciclaje!.')
+            return back()->with('messages', '¡Paciente restaurar de la papelera de reciclaje!.')
                     ->with('typealert', 'success');
         endif;
     }

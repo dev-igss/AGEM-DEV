@@ -36,7 +36,7 @@
 
                         <div class="card-body" style="font-size: 1.2em;"> 
                              
-                            <p class="card-text" style="margin-top:-15px;"><strong>Edad - Genero: </strong>  {{ $a->patient->age.'a'.' - '.getGenderPatient(null, $a->patient->gender) }} </p>        
+                            <p class="card-text" style="margin-top:-15px;"><strong>Edad - Genero: </strong>  {{ $a->patient->age.'a' }} - @if($a->gender == 0) Masculino @else Femenino @endif</p>        
                             <p class="card-text" style="margin-top:-15px;"> <strong>Expediente: </strong> {{ $a->num_study }}</p>     
                             <p class="card-text">
                                 <small> 

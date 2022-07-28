@@ -260,6 +260,7 @@
                     'patient_edit' => 'Puede editar pacientes.',
                     'patient_edit_affiliation' => 'Puede editar la afiliación de los pacientes.',
                     'patient_delete' => 'Puede borrar pacientes.',
+                    'patient_restore' => 'Puede restaurar pacientes.',
                     'patient_history_exam' => 'Puede ver el historial de citas de pacientes.',
                     'patient_setting' => 'Puede modificar la configuración de los correlativos de expedientes.'
                 ]

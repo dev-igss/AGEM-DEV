@@ -40,13 +40,13 @@
         Route::get('/pacientes/{filtro}', 'Admin\PatientController@getHome')->name('patient_list');  
         Route::post('/paciente/busqueda', 'Admin\PatientController@postSearch')->name('patient_list');       
         Route::get('/paciente/{id}/editar', 'Admin\PatientController@getPatientEdit')->name('patient_edit');
-        Route::post('/paciente/{id}/editar', 'Admin\PatientController@postPatientEdit')->name('patient_edit');
-        Route::get('/paciente/{id}/actualizar/afiliacion/principal/{affiliation}', 'Admin\PatientController@getPatientUpdateParent')->name('patient_edit');
+        Route::post('/paciente/{id}/editar', 'Admin\PatientController@postPatientEdit')->name('patient_edit');        
+        Route::get('/paciente/configuracion', 'Admin\PatientController@getConfigPatient')->name('patient_setting');
+        Route::post('/paciente/configuracion', 'Admin\PatientController@postConfigPatient')->name('patient_setting');
         Route::get('/paciente/{id}/historial_citas', 'Admin\PatientController@getPatientHistoryExam')->name('patient_history_exam');
         Route::get('/paciente/{id}/historial_codigos_expedientes', 'Admin\PatientController@getPatientHistoryCode')->name('patient_history_exam');
         Route::get('/paciente/{id}/borrar', 'Admin\PatientController@getPatientDelete')->name('patient_delete');
-        Route::get('/paciente/configuracion', 'Admin\PatientController@getConfigPatient')->name('patient_setting');
-        Route::post('/paciente/configuracion', 'Admin\PatientController@postConfigPatient')->name('patient_setting');
+        Route::get('/paciente/{id}/restablecer', 'Admin\PatientController@getPatientRestore')->name('patient_restore');
 
         //Citas
         Route::get('/citas', 'Admin\AppointmentController@getHome')->name('appointment_list');
@@ -76,6 +76,7 @@
         //Reportes
         Route::get('/reportes','Admin\DashboardController@getStaticsDates')->name('dashboard');      
         Route::post('/reporte/filtrado/fechas','Admin\DashboardController@postStaticsBetweenDates')->name('dashboard');  
+        Route::get('/reporte/mensual/citas','Admin\DashboardController@getStaticsMonth')->name('dashboard');  
 
         //Users        
         Route::get('/usuarios', 'Admin\UserController@getUsers')->name('user_list');

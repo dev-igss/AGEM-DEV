@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 
 //RUTAS DE Autentificacion
+Route::get('/','ConnectController@getLogin')->name('login');
 Route::get('/inicio_sesion','ConnectController@getLogin')->name('login');
 Route::post('/inicio_sesion','ConnectController@postLogin')->name('login');
 Route::get('/logout','ConnectController@getLogout')->name('logout');

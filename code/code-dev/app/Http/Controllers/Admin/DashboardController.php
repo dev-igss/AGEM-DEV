@@ -406,4 +406,59 @@ class DashboardController extends Controller
         return view('admin.statistics.filtrer_date', $data);
     }
 
+    public function getStaticsMonth(){
+        $month =  Carbon::now()->format('m');
+        $today = Carbon::now()->format('Y-m-d');
+
+        $services = Service::select('id', DB::raw('CONCAT(name) AS nombre'))
+                        ->where('type', '1')
+                        ->get();
+
+        $citas_x_ser = DB::table('appointments')
+                        ->join('details_appointments', 'appointments.id', 'details_appointments.idappointment')
+                        ->select(DB::raw('COUNT(DISTINCT details_appointments.idappointment) AS total_citas'), DB::raw('details_appointments.idservice AS id_service'))
+                        ->whereMonth('appointments.date', $month)
+                        ->groupBy('details_appointments.idservice')
+                        ->get();
+
+        
+
+        $estudios_x_ser = DB::table('appointments')
+                        ->join('details_appointments', 'appointments.id', 'details_appointments.idappointment')
+                        ->select(DB::raw('COUNT(details_appointments.idstudy) AS total_estudios'), DB::raw('details_appointments.idservice AS id_service'))
+                        ->whereMonth('appointments.date', $month)
+                        ->groupBy('details_appointments.idservice')
+                        ->get();
+        
+        /*$materiales_x_stu = DB::table('appointments')
+                        ->join('details_appointments', 'appointments.id', 'details_appointments.idappointment')
+                        ->join('materials_appointments', 'details_appointments.idappointment', 'materials_appointments.idappointment')
+                        ->select(DB::raw('SUM(materials_appointments.amount) AS total_materiales'), DB::raw('details_appointments.idservice AS id_service'))
+                        ->whereMonth('appointments.date', $month)
+                        ->groupBy('details_appointments.idservice', 'materials_appointments.material')
+                        ->get();*/
+
+        $materiales_x_stu = DetailAppointment::with(['materials'])
+        ->join('appointments', 'details_appointments.idappointment', 'appointments.id')
+        ->whereMonth('appointments.date', $month)
+        ->where('appointments.status', '3')
+        ->get();
+
+
+
+        return $materiales_x_stu;
+
+        $data = [
+            
+            'today' => $today,
+            'services' => $services,
+            'citas_x_ser' => $citas_x_ser,
+            'estudios_x_ser' => $estudios_x_ser
+        ];
+
+        //return $data;
+
+        return view('admin.statistics.statistic_month',$data);
+    }
+
 }

@@ -102,6 +102,7 @@
                             <td><strong> OPCIONES </strong></td>
                             <td><strong> FECHA </strong></td>
                             <td><strong> PACIENTE </strong></td>
+                            <td><strong> ESTUDIOS A REALIZAR</strong></td>
                             <td><strong> ESTADO </strong></td>
                         </tr>
                     </thead>
@@ -117,7 +118,7 @@
                                             @if($a->status == '5')
                                                 <a href="#" data-action="reprogramacion_forzada" data-path="admin/cita" data-object="{{ $a->id }}" class="btn-deleted" data-toogle="tooltrip" data-placement="top" title="Reprogramación Forzada" ><i class="fas fa-calendar-alt"></i></a>
                                             @endif
-                                            @if($a->status == '0' || $a->status == '5')
+                                            @if($a->status == '0' || $a->status == '4' || $a->status == '5')
                                                 <a href="#" data-date="{{$a->date}}" data-exam="{{$a->area}}" data-action="cambio_horario" data-path="admin/cita" data-object="{{ $a->id }}" class="btn-deleted" data-toogle="tooltrip" data-placement="top" title="Cambio de Horario" ><i class="fa-solid fa-clock"></i></a>
                                             @endif
                                         @endif
@@ -161,6 +162,17 @@
                                     {{ $a->patient->name.' '.$a->patient->lastname }} <br>
                                     <span>AF. {{ $a->patient->affiliation }}</span> <br>                                    
                                     <small>Expediente. {{ $a->num_study }}</small>
+                                </td>
+                                <td> 
+                                    @foreach($details_appointments as $details)
+                                        @if($details->idappointment == $a->id)
+                                            @if($details->study->is_doppler == 1)
+                                                <span style="font-size: 0.90em; color: red;"><i class="fa-solid fa-chevron-right"></i> {{ $details->study->name }} <br></span>
+                                            @else
+                                                <span style="font-size: 0.90em;"><i class="fa-solid fa-chevron-right"></i> {{ $details->study->name }} <br></span>
+                                            @endif
+                                        @endif
+                                    @endforeach
                                 </td>
                                 <td>
                                     {{ getStatusAppointment(null, $a->status)  }}                                    

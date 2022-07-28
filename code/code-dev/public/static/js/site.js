@@ -1,7 +1,6 @@
 const http = new XMLHttpRequest();
 const csrfToken = document.getElementsByName('csrf-token')[0].getAttribute('content');
 var base = location.protocol+'//'+location.host;
-
 var route = document.getElementsByName('routeName')[0].getAttribute('content');
 
 document.addEventListener('DOMContentLoaded', function(){
@@ -23,8 +22,7 @@ function delete_object(e){
     var action = this.getAttribute('data-action');
     var path = this.getAttribute('data-path');
     //var url = base + '/agem/public/' + path + '/' + object + '/' + action;
-    var url = base + '/' + path + '/' + object + '/' + action;
-    
+    var url = base + path + '/' + object + '/' + action;
     var title, text, icon, material, cant, tecnico, comment, request;
 
     if(action == "comentario"){
@@ -75,7 +73,7 @@ function delete_object(e){
         });
     }
 
-    if(action == "solicitud_reprogramacion" || action == "ausente_examen"){       
+    if(action == "solicitud_reprogramacion" || action == "ausente_examen" || action == "agregar_estudio"){       
         Swal.fire({
             title: title,
             text: text,
@@ -85,8 +83,7 @@ function delete_object(e){
             denyButtonText: 'Cancelar',
         }).then((result) =>{
             if (result.isConfirmed) {
-                window.location.href = url;      
-                //console.log(url);         
+                window.location.href = url;               
             }
 
             //console.log(request);
@@ -145,7 +142,7 @@ function delete_object(e){
                 select = document.getElementById('swal-input2');
                 select.innerHTML = "";
                 //var url1 = base + '/agem/public/agem/api/load/name/study/all/'+area;
-                var url1 = base + '/agem/api/load/name/study/all/'+area; 
+                var url1 = base + '/admin/agem/api/load/studies/'+exam; 
                 http.open('GET', url1, true);
                 http.setRequestHeader('X-CSRF-TOKEN', csrfToken);
                 http.send();

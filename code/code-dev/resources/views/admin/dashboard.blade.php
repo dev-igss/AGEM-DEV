@@ -9,7 +9,16 @@
             <div class="panel shadow">
                 <div class="header">
                     <h2 class="title"><i class="fas fa-chart-bar"></i><strong> Estadísticas Rápidas Del Día</strong></h2>
+                    <ul>                                                           
+                        <li>
+                            <a href="{{ url('/admin/reporte/mensual/citas') }}" ><i class="fa-solid fa-file-pdf"></i> Imprimir Reporte</a>
+                        </li>                        
+                    </ul>
                 </div>
+
+                
+                    
+                
             </div>
 
             <div class="row mtop16">

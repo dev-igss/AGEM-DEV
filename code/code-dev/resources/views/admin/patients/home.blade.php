@@ -3,7 +3,7 @@
 
 @section('breadcrumb')
     <li class="breadcrumb-item">
-        <a href="{{ url('/admin/pacientes') }}" class="nav-link"><i class="fas fa-users"></i> Pacientes</a>
+        <a href="{{ url('/admin/pacientes') }}" class="nav-link"><i class="fas fa-users"></i> Pacientes </a>
     </li>
 @endsection
 
@@ -21,7 +21,7 @@
 
                     <div class="inside" style="text-align: center; font-weight: bold;">
                         <div class="btn-group" role="group" aria-label="...">
-                            <a href="{{url('/admin/pacientes/todos')}}" type="button" class="btn btn-default">Todos</a>
+                            <a href="{{url('/admin/pacientes/inicio')}}" type="button" class="btn btn-default">Todos</a>
                             <a href="{{url('/admin/pacientes/a')}}" type="button" class="btn btn-default">A</a>
                             <a href="{{url('/admin/pacientes/b')}}" type="button" class="btn btn-default">B</a>
                             <a href="{{url('/admin/pacientes/c')}}" type="button" class="btn btn-default">C</a>
@@ -50,6 +50,7 @@
                             <a href="{{url('/admin/pacientes/x')}}" type="button" class="btn btn-default">X</a>
                             <a href="{{url('/admin/pacientes/y')}}" type="button" class="btn btn-default">Y</a>
                             <a href="{{url('/admin/pacientes/z')}}" type="button" class="btn btn-default">Z</a>
+                            <a href="{{url('/admin/pacientes/borrados')}}" type="button" class="btn btn-default">Borrados</a>
                         </div>
                     </div>
 
@@ -104,20 +105,27 @@
                             <tr>
                                 <td>
                                     <div class="opts">
-                                        @if(kvfj(Auth::user()->permissions, 'patient_edit'))
-                                            <a href="{{ url('/admin/paciente/'.$p->id.'/editar') }}" data-toogle="tooltrip" data-placement="top" title="Ver"><i class="fas fa-edit"></i></a>
-                                        @endif
-                                        @if(kvfj(Auth::user()->permissions, 'patient_history_exam'))
-                                            <a href="{{ url('/admin/paciente/'.$p->id.'/historial_citas') }}" data-toogle="tooltrip" data-placement="top" title="Historial de Examenes"><i class="fas fa-book-medical"></i></a>
-                                        @endif
-                                        @if(kvfj(Auth::user()->permissions, 'patient_edit'))
-                                            <a href="{{ url('/admin/paciente/'.$p->id.'/historial_codigos_expedientes') }}" data-toogle="tooltrip" data-placement="top" title="Historial de Codigos"><i class="fas fa-list"></i></a>
-                                        @endif
-                                        <!--@if($p->affiliation_principal != NULL)
-                                            <a href="{{ url('/admin/paciente/'.$p->id.'/actualizar/afiliacion/principal/'.$p->affiliation_principal) }}" data-toogle="tooltrip" data-placement="top" title="Actualizar Afiliación Principal"><i class="fa fa-refresh"></i></a>
-                                        @endif-->
-                                        @if(kvfj(Auth::user()->permissions, 'patient_delete'))                                            
-                                            <a href="#" data-action="borrar" data-path="admin/paciente" data-object="{{ $p->id }}" class="btn-deleted" data-toogle="tooltrip" data-placement="top" title="Borrar" ><i class="fa-solid fa-trash"></i></a>    
+                                        @if($p->deleted_at == NULL)
+                                            @if(kvfj(Auth::user()->permissions, 'patient_edit'))
+                                                <a href="{{ url('/admin/paciente/'.$p->id.'/editar') }}" data-toogle="tooltrip" data-placement="top" title="Ver"><i class="fas fa-edit"></i></a>
+                                            @endif
+                                            @if(kvfj(Auth::user()->permissions, 'patient_history_exam'))
+                                                <a href="{{ url('/admin/paciente/'.$p->id.'/historial_citas') }}" data-toogle="tooltrip" data-placement="top" title="Historial de Examenes"><i class="fas fa-book-medical"></i></a>
+                                            @endif
+                                            @if(kvfj(Auth::user()->permissions, 'patient_edit'))
+                                                <a href="{{ url('/admin/paciente/'.$p->id.'/historial_codigos_expedientes') }}" data-toogle="tooltrip" data-placement="top" title="Historial de Codigos"><i class="fas fa-list"></i></a>
+                                            @endif
+                                            <!--@if($p->affiliation_principal != NULL)
+                                                <a href="{{ url('/admin/paciente/'.$p->id.'/actualizar/afiliacion/principal/'.$p->affiliation_principal) }}" data-toogle="tooltrip" data-placement="top" title="Actualizar Afiliación Principal"><i class="fa fa-refresh"></i></a>
+                                            @endif-->
+                                            @if(kvfj(Auth::user()->permissions, 'patient_delete'))                                            
+                                                <a href="#" data-action="borrar" data-path="admin/paciente" data-object="{{ $p->id }}" class="btn-deleted" data-toogle="tooltrip" data-placement="top" title="Borrar" ><i class="fa-solid fa-trash"></i></a>    
+                                            @endif
+                                        @else
+                                            @if(kvfj(Auth::user()->permissions, 'patient_restore'))   
+                                                <a href="{{ url('/admin/paciente/'.$p->id.'/restablecer') }}" data-toogle="tooltrip" data-placement="top" title="Restaurar Paciente"><i class="fa-solid fa-trash-arrow-up"></i></a>                                         
+                                                <!--<a href="#" data-action="restaurar" data-path="admin/paciente" data-object="{{ $p->id }}" class="btn-deleted" data-toogle="tooltrip" data-placement="top" title="Restaurar" ><i class="fa-solid fa-trash-arrow-up"></i></a>    -->
+                                            @endif
                                         @endif
                                     </div>
                                 </td>

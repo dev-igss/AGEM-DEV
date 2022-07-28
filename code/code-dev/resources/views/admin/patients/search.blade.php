@@ -21,7 +21,7 @@
 
                     <div class="inside" style="text-align: center; font-weight: bold;">
                         <div class="btn-group" role="group" aria-label="...">
-                            <a href="{{url('/admin/pacientes/todos')}}" type="button" class="btn btn-default">Todos</a>
+                            <a href="{{url('/admin/pacientes/inicio')}}" type="button" class="btn btn-default">Inicio</a>
                             <a href="{{url('/admin/pacientes/a')}}" type="button" class="btn btn-default">A</a>
                             <a href="{{url('/admin/pacientes/b')}}" type="button" class="btn btn-default">B</a>
                             <a href="{{url('/admin/pacientes/c')}}" type="button" class="btn btn-default">C</a>
@@ -50,6 +50,7 @@
                             <a href="{{url('/admin/pacientes/x')}}" type="button" class="btn btn-default">X</a>
                             <a href="{{url('/admin/pacientes/y')}}" type="button" class="btn btn-default">Y</a>
                             <a href="{{url('/admin/pacientes/z')}}" type="button" class="btn btn-default">Z</a>
+                            <a href="{{url('/admin/pacientes/borrados')}}" type="button" class="btn btn-default">Borrados</a>
                         </div>
                     </div>
 

@@ -279,8 +279,8 @@ function delete_object(e){
     var exam = this.getAttribute('data-exam');
     var date = this.getAttribute('data-date');
     //console.log(exam);
-    var url = base + '/agem/public/' + path + '/' + object + '/' + action;
-    //var url = base + '/' + path + '/' + object + '/' + action;
+    //var url = base + '/agem/public/' + path + '/' + object + '/' + action;
+    var url = base + '/' + path + '/' + object + '/' + action;
     var title, text, icon, date, status, material, amount, comment;
     var today = new Date();
     var dd = today.getDate();
@@ -300,6 +300,12 @@ function delete_object(e){
 
     if(action == "borrar"){ 
         title = '¿Esta seguro de '+'"Borrar"'+' esté registro?';
+        text = "Recuerde que esta acción no se podra realizar nuevamente.";
+        icon = "warning";
+    }
+
+    if(action == "restaurar"){ 
+        title = '¿Esta seguro de '+'"Restaurar"'+' esté registro?';
         text = "Recuerde que esta acción no se podra realizar nuevamente.";
         icon = "warning";
     }
@@ -487,6 +493,21 @@ function delete_object(e){
                 window.location.href =  url;
             }
         });
+    }else if(action == "restaurar"){
+        Swal.fire({
+            title: title,
+            text: text,
+            icon: icon,
+            showDenyButton: true,
+            confirmButtonText: 'Restaurar',
+            denyButtonText: 'Cancelar',
+        }).then((result) =>{
+
+            if (result.isConfirmed) {
+                
+                window.location.href =  url;
+            }
+        });
     }else if(action == "cambio_horario"){       
         Swal.fire({
             title: title,
@@ -529,8 +550,8 @@ function delete_object(e){
                 });    
                 select = document.getElementById('swal-input2');
                 select.innerHTML = "";
-                var url1 = base + '/agem/public/admin/agem/api/load/schedules/change';
-                //var url1 = base + '/admin/agem/api/load/schedules/'+fecha+'/'+exam;
+                //var url1 = base + '/agem/public/admin/agem/api/load/schedules/change';
+                var url1 = base + '/admin/agem/api/load/schedules/'+fecha+'/'+exam;
                 http.open('GET', url1, true);
                 http.setRequestHeader('X-CSRF-TOKEN', csrfToken);
                 http.send();
@@ -562,8 +583,8 @@ function delete_object(e){
 function setInfoAddPatient(){
     var exam = document.getElementById('exam_b').value;    
     var affiliation_b = document.getElementById('affiliationp').value;
-    var url = base + '/agem/public/admin/agem/api/load/add/patient/'+affiliation_b+'/'+exam;
-    //var url = base + '/admin/agem/api/load/add/patient/'+affiliation_b+'/'+exam;
+    //var url = base + '/agem/public/admin/agem/api/load/add/patient/'+affiliation_b+'/'+exam;
+    var url = base + '/admin/agem/api/load/add/patient/'+affiliation_b+'/'+exam;
     var patient_id = document.getElementById('patient_id');
     var name = document.getElementById('namep');
     var lastname = document.getElementById('lastnamep');
@@ -572,6 +593,8 @@ function setInfoAddPatient(){
     var date_al = document.getElementById('date_al');
     var numexp_al = document.getElementById('numexp_al'); 
     var type_exam = document.getElementById('type_examp');
+    var idpatient;
+
 
     http.open('GET', url, true);
     http.setRequestHeader('X-CSRF-TOKEN', csrfToken);
@@ -584,111 +607,203 @@ function setInfoAddPatient(){
             //console.log(data);
             if('patient' in data){
                 patient_id.value = data.patient[0].id;
+                idpatient = data.patient[0].id;
                 name.value = data.patient[0].name;
                 lastname.value = data.patient[0].lastname;
                 contact.value = data.patient[0].contact;
+
+                if('code_last' in data){
+                    code_last.value = data.code_last[0].code;
+                }
+    
+                
+    
+                if('appointment_last' in data){
+                    
+                    document.getElementById("estudios_paciente").style.display = "block";
+    
+                    for(i=0; i<data.appointment_last.length; i++){
+                        if(idpatient === data.appointment_last[i].patient_id){
+                            for(j=0; j<data.detalles.length; j++){
+                        
+                        
+                                if(data.appointment_last[i].id === data.detalles[j].idappointment){
+                                    console.log(data.detalles[j]);
+                                    var fila='<tr><td><input type="hidden" >'+data.appointment_last[i].date+'</td><td><input type="hidden" >'+data.detalles[j].study.name+'</td></tr>'; 
+                                    $('#detalles1').append(fila);
+                                }
+                            
+                            
+                            
+                            }  
+                        }      
+                    }    
+                    
+    
+                    
+                }else{
+                    document.getElementById("appointment_msg").style.display = "block";
+                }
+                
+                //console.log(data.patient.length);
+    
+                if(data.patient.length > 1){
+                    
+                    document.getElementById("div_beneficiarios").style.display = "block";
+                    var inputquestion = document.getElementById('beneficiario_question');
+                    
+                    $(inputquestion).change(function(){
+                        if(inputquestion.value == 1){
+                            //$('#detalles1').parent().remove();
+                            //$("#detalles1").closest("tr").remove();
+                            $("#detalles1 > tbody").empty();
+                            patient_id.value = "";
+                            name.value = "";
+                            lastname.value = "";
+                            contact.value = "";
+                            code_last.value = "";
+                            document.getElementById("div_select_beneficiarios").style.display = "block";
+                            select_beneficiarios = document.getElementById('beneficiarios');
+                            select_beneficiarios.innerHTML = "";
+                            select_beneficiarios.innerHTML += "<option value=\""+0+"\">Seleccione una opción</option>";
+                            for(var i=0; i< data.patient.length; i++){
+                                if(data.patient[i].type != 0){
+                                    select_beneficiarios.innerHTML += "<option value=\""+data.patient[i].id+"-"+data.patient[i].name+"-"+data.patient[i].lastname+"-"+data.patient[i].contact+"\">"+data.patient[i].name+" "+data.patient[i].lastname+"</option>";
+                                }
+                            }
+    
+                            $(select_beneficiarios).change(function(){
+                                //console.log(select_beneficiarios.value);
+                                if(select_beneficiarios != 0){
+                                    beneficiario_seleccionado = select_beneficiarios.value;
+                                    informacion_beneficiario = beneficiario_seleccionado.split('-');
+                                    //console.log(informacion_beneficiario[0]);
+                                    patient_id.value = informacion_beneficiario[0];
+                                    beneficiarioid = informacion_beneficiario[0];
+                                    name.value = informacion_beneficiario[1];
+                                    lastname.value = informacion_beneficiario[2];
+                                    contact.value = informacion_beneficiario[3];
+                                    if(select_beneficiarios != 0){
+                                        var url = base + '/admin/agem/api/load/add/patient/beneficiario/'+informacion_beneficiario[0]+'/'+exam;
+                                        http.open('GET', url, true);
+                                        http.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+                                        http.send(); 
+                                        http.onreadystatechange = function(){
+                                            if(this.readyState == 4 && this.status == 200){
+                                                var data = this.responseText;
+                                                data = JSON.parse(data);
+                                                
+
+                                                if(data.length){
+                                                    code_last.value = data.code_last[0].code;
+                                                }
+                                                
+                                                
+
+                                                if('appointment_last' in data){
+                                                    document.getElementById("estudios_paciente").style.display = "block";
+    
+                                                    for(i=0; i<data.appointment_last.length; i++){
+                                                        //console.log(beneficiarioid);
+                                                        //if(beneficiarioid === data.appointment_last[i].patient_id){
+                                                            console.log(data.appointment_last);
+                                                            for(j=0; j<data.detalles.length; j++){                                                     
+                                                        
+                                                                if(data.appointment_last[i].id === data.detalles[j].idappointment){
+                                                                    var fila='<tr><td><input type="hidden" >'+data.appointment_last[i].date+'</td><td><input type="hidden" >'+data.detalles[j].study.name+'</td></tr>'; 
+                                                                    $('#detalles1').append(fila);
+                                                                    //console.log("funciona");
+                                                                }
+                                                            
+                                                            
+                                                            
+                                                            }  
+                                                        //}      
+                                                    } 
+                                                       
+                                                    //console.log(data.appointment_last);
+                                    
+                                                    
+                                                }else{
+                                                    document.getElementById("appointment_msg").style.display = "block";
+                                                }
+                                            }else{
+                                                code_last.value = "";
+                                            }
+                                        }
+                                    }
+                                }else{
+                                    patient_id.value = "";
+                                    name.value = "";
+                                    lastname.value = "";
+                                    contact.value = "";
+                                    code_last.value = "";
+                                }
+                            });
+                        }
+                        if(inputquestion.value == 0){
+                            document.getElementById("div_beneficiarios").style.display = "none";
+                            document.getElementById("div_select_beneficiarios").style.display = "none";
+                            patient_id.value = "";
+                            name.value = "";
+                            lastname.value = "";
+                            contact.value = "";
+                            code_last.value = "";
+    
+                            if('patient' in data){
+                                patient_id.value = data.patient[0].id;
+                                name.value = data.patient[0].name;
+                                lastname.value = data.patient[0].lastname;
+                                contact.value = data.patient[0].contact;
+                            }  
+                
+                            if('code_last' in data){
+                                code_last.value = data.code_last[0].code;
+                            }
+                        }
+                        
+                        
+                    });
+                    
+                }
             }      
             else{
                 document.getElementById("patient_msg").style.display = "block";
                 document.getElementById("register").style.display = "block";
                 document.getElementById("register").classList.add("d-flex");
-            }  
 
-            if('code_last' in data){
-                code_last.value = data.code_last[0].code;
-            }
-            
-            //console.log(data.patient.length);
-
-            if(data.patient.length > 1){
-                document.getElementById("div_beneficiarios").style.display = "block";
-                var inputquestion = document.getElementById('beneficiario_question');
-                
-                $(inputquestion).change(function(){
-                    if(inputquestion.value == 1){
-                        patient_id.value = "";
-                        name.value = "";
-                        lastname.value = "";
-                        contact.value = "";
-                        code_last.value = "";
-                        document.getElementById("div_select_beneficiarios").style.display = "block";
-                        select_beneficiarios = document.getElementById('beneficiarios');
-                        select_beneficiarios.innerHTML = "";
-                        select_beneficiarios.innerHTML += "<option value=\""+0+"\">Seleccione una opción</option>";
-                        for(var i=0; i< data.patient.length; i++){
-                            if(data.patient[i].type != 0){
-                                select_beneficiarios.innerHTML += "<option value=\""+data.patient[i].id+"-"+data.patient[i].name+"-"+data.patient[i].lastname+"-"+data.patient[i].contact+"\">"+data.patient[i].name+" "+data.patient[i].lastname+"</option>";
-                            }
-                        }
-
-                        $(select_beneficiarios).change(function(){
-                            console.log(select_beneficiarios.value);
-                            if(select_beneficiarios != 0){
-                                beneficiario_seleccionado = select_beneficiarios.value;
-                                informacion_beneficiario = beneficiario_seleccionado.split('-');
-                                //console.log(informacion_beneficiario[0]);
-                                patient_id.value = informacion_beneficiario[0];
-                                name.value = informacion_beneficiario[1];
-                                lastname.value = informacion_beneficiario[2];
-                                contact.value = informacion_beneficiario[3];
-                                if(select_beneficiarios != 0){
-                                    var url = base + '/agem/public/admin/agem/api/load/add/patient/beneficiario/'+informacion_beneficiario[0]+'/'+exam;
-                                    http.open('GET', url, true);
-                                    http.setRequestHeader('X-CSRF-TOKEN', csrfToken);
-                                    http.send(); 
-                                    http.onreadystatechange = function(){
-                                        if(this.readyState == 4 && this.status == 200){
-                                            var data = this.responseText;
-                                            data = JSON.parse(data);
-
-                                            //console.log(data);
-                                            code_last.value = data.code_last[0].code;
-                                        }else{
-                                            code_last.value = "";
-                                        }
-                                    }
-                                }
+                var studies_actual = document.getElementById('studies_actual').value;
+                select = document.getElementById('studies');
+                select.innerHTML = "";
+                //var url = base + '/agem/public/admin/agem/api/load/studies/'+exam;
+                var url = base + '/admin/agem/api/load/studies/'+exam;
+                http.open('GET', url, true);
+                http.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+                http.send();
+                http.onreadystatechange = function(){
+                    if(this.readyState == 4 && this.status == 200){
+                        var data = this.responseText;
+                        data = JSON.parse(data);
+                        data.forEach( function(element){
+                            if(studies_actual == element.id){
+                                select.innerHTML += "<option value=\""+element.id+"\" selected>"+element.name+"</option>";
                             }else{
-                                patient_id.value = "";
-                                name.value = "";
-                                lastname.value = "";
-                                contact.value = "";
-                                code_last.value = "";
+                                select.innerHTML += "<option value=\""+element.id+"\">"+element.name+"</option>";
                             }
                         });
-                    }
-                    if(inputquestion.value == 0){
-                        document.getElementById("div_beneficiarios").style.display = "none";
-                        document.getElementById("div_select_beneficiarios").style.display = "none";
-                        patient_id.value = "";
-                        name.value = "";
-                        lastname.value = "";
-                        contact.value = "";
-                        code_last.value = "";
 
-                        if('patient' in data){
-                            patient_id.value = data.patient[0].id;
-                            name.value = data.patient[0].name;
-                            lastname.value = data.patient[0].lastname;
-                            contact.value = data.patient[0].contact;
-                        }  
-            
-                        if('code_last' in data){
-                            code_last.value = data.code_last[0].code;
-                        }
-                    }
-                    
-                    
-                });
-                
-            }
-            
+                        
 
+                    }
+                }
+            }  
+            document.getElementById("estudios_paciente").style.display = "block";
+            
             var studies_actual = document.getElementById('studies_actual').value;
             select = document.getElementById('studies');
             select.innerHTML = "";
-            var url = base + '/agem/public/admin/agem/api/load/studies/'+exam;
-            //var url = base + 'admin/agem/api/load/studies/'+exam;
+            //var url = base + '/agem/public/admin/agem/api/load/studies/'+exam;
+            var url = base + '/admin/agem/api/load/studies/'+exam;
             http.open('GET', url, true);
             http.setRequestHeader('X-CSRF-TOKEN', csrfToken);
             http.send();
@@ -715,8 +830,8 @@ function setInfoAddPatient(){
 
 function setGenerateCodeRx(){
     var nomenclatura = 'RX';
-    var url = base + '/agem/public/admin/agem/api/load/generate/code/'+nomenclatura;
-    //var url = base + '/admin/agem/api/load/generate/code/'+nomenclatura;
+    //var url = base + '/agem/public/admin/agem/api/load/generate/code/'+nomenclatura;
+    var url = base + '/admin/agem/api/load/generate/code/'+nomenclatura;
     var num_rx = document.getElementById('pnum_rx');
     var nomenclature = document.getElementById('pnum_rx_nom');
     var correlative = document.getElementById('pnum_rx_cor');
@@ -739,8 +854,8 @@ function setGenerateCodeRx(){
 
 function setGenerateCodeUsg(){
     var nomenclatura = 'USG';
-    var url = base + '/agem/public/admin/agem/api/load/generate/code/'+nomenclatura;
-    //var url = base + '/admin/agem/api/load/generate/code/'+nomenclatura;
+    //var url = base + '/agem/public/admin/agem/api/load/generate/code/'+nomenclatura;
+    var url = base + '/admin/agem/api/load/generate/code/'+nomenclatura;
     var num_usg = document.getElementById('pnum_usg');
     var nomenclature = document.getElementById('pnum_usg_nom');
     var correlative = document.getElementById('pnum_usg_cor');
@@ -763,8 +878,8 @@ function setGenerateCodeUsg(){
 
 function setGenerateCodeMmo(){
     var nomenclatura = 'MMO';
-    var url = base + '/agem/public/admin/agem/api/load/generate/code/'+nomenclatura;
-    //var url = base + '/admin/agem/api/load/generate/code/'+nomenclatura;
+    //var url = base + '/agem/public/admin/agem/api/load/generate/code/'+nomenclatura;
+    var url = base + '/admin/agem/api/load/generate/code/'+nomenclatura;
     var num_mmo = document.getElementById('pnum_mmo');
     var nomenclature = document.getElementById('pnum_mmo_nom');
     var correlative = document.getElementById('pnum_mmo_cor');
@@ -787,8 +902,8 @@ function setGenerateCodeMmo(){
 
 function setGenerateCodeDmo(){
     var nomenclatura = 'DMO';
-    var url = base + '/agem/public/admin/agem/api/load/generate/code/'+nomenclatura;
-    //var url = base + '/admin/agem/api/load/generate/code/'+nomenclatura;
+    //var url = base + '/agem/public/admin/agem/api/load/generate/code/'+nomenclatura;
+    var url = base + '/admin/agem/api/load/generate/code/'+nomenclatura;
     var num_dmo = document.getElementById('pnum_dmo');
     var nomenclature = document.getElementById('pnum_dmo_nom');
     var correlative = document.getElementById('pnum_dmo_cor');
@@ -827,8 +942,8 @@ function setGenerateCode(){
     }        
     //console.log(nomenclatura);
     
-    var url = base + '/agem/public/admin/agem/api/load/generate/code/'+nomenclatura;
-    //var url = base + '/admin/agem/api/load/generate/code/'+nomenclatura;
+    //var url = base + '/agem/public/admin/agem/api/load/generate/code/'+nomenclatura;
+    var url = base + '/admin/agem/api/load/generate/code/'+nomenclatura;
     var num_code = document.getElementById('num_code_new');
     var nomenclature = document.getElementById('num_code_nom');
     var correlative = document.getElementById('num_code_cor');
@@ -867,8 +982,8 @@ function setGenerateCodePatientActual(){
     }        
     //console.log(nomenclatura);
     
-    var url = base + '/agem/public/admin/agem/api/load/generate/code/'+nomenclatura;
-    //var url = base + '/admin/agem/api/load/generate/code/'+nomenclatura;
+    //var url = base + '/agem/public/admin/agem/api/load/generate/code/'+nomenclatura;
+    var url = base + '/admin/agem/api/load/generate/code/'+nomenclatura;
     var num_code = document.getElementById('numexpp');
     var nomenclature = document.getElementById('num_code_nom_act');
     var correlative = document.getElementById('num_code_cor_act');
@@ -893,15 +1008,29 @@ function getDisponibilidadHorario(){
     var citas_configuradas = document.getElementById('citas_configuradas').value;
     var inputdate = document.getElementById('date_new_app');
     var options=$('#schedules option').clone();
-    var control_am = document.getElementById('control_am');
-    var control_pm = document.getElementById('control_pm');
+    
+    var control_usg_am = document.getElementById('control_usg_am');
+    var control_usg_pm = document.getElementById('control_usg_pm');
+    var control_usg_doppler_am = document.getElementById('control_usg_doppler_am');
+    var control_usg_doppler_pm = document.getElementById('control_usg_doppler_pm');
+    var control_mmo_am = document.getElementById('control_mmo_am');
+    var control_mmo_pm = document.getElementById('control_mmo_pm');
+    var control_dmo_am = document.getElementById('control_dmo_am');
+    var control_dmo_pm = document.getElementById('control_dmo_pm');
+
+    //console.log(citas_configuradas);
     
 
     $(inputdate).change(function(){
-        
-        control_am.value = "";
-        control_pm.value = "";
-        
+
+        control_usg_am.value = "";
+        control_usg_pm.value = "";
+        control_usg_doppler_am.value = "";
+        control_usg_doppler_pm.value = "";
+        control_mmo_am.value = "";
+        control_mmo_pm.value = "";
+        control_dmo_am.value = "";
+        control_dmo_pm.value = "";
 
         var fecha = document.getElementById("date_new_app").value;
         //console.log(fecha);
@@ -911,8 +1040,8 @@ function getDisponibilidadHorario(){
         var exam = document.getElementById('exam_b').value;
         
         
-        var url = base + '/agem/public/admin/agem/api/load/schedules/'+fecha+'/'+exam;
-        //var url = base + '/admin/agem/api/load/schedules/'+fecha+'/'+exam;
+        //var url = base + '/agem/public/admin/agem/api/load/schedules/'+fecha+'/'+exam;
+        var url = base + '/admin/agem/api/load/schedules/'+fecha+'/'+exam;
         http.open('GET', url, true);
         http.setRequestHeader('X-CSRF-TOKEN', csrfToken);
         http.send();
@@ -921,113 +1050,111 @@ function getDisponibilidadHorario(){
                 //console.log(data); 
                 var data = this.responseText;
                 data = JSON.parse(data);
-                  
-                if(data.length > 0){
-                    data.forEach( function(schedule, index){
-                        
-                        if(schedule.total >= citas_configuradas){
-                            for(i=1; i <= 18; i++){
-                                //console.log(citas_configuradas);
-                                if(schedule.schedule_id == i){
-                                    $('#schedules option[value="'+schedule.schedule_id+'"]').remove();    
-                                }
-                            }                                                          
-                        }    
-                    });  
-                }else{
-                    $('#schedules').html(options);
+                //console.log(data); 
+
+                if('cant_citas' in data){
+                    if(data.cant_citas.length > 0){
+                        data.cant_citas.forEach( function(schedule, index){
+                            if(schedule.total >= citas_configuradas){
+                                for(i=1; i <= 18; i++){
+                                    //console.log(citas_configuradas);
+                                    if(schedule.schedule_id == i){
+                                            $('#schedules option[value="'+schedule.schedule_id+'"]').remove();  
+                                    }
+                                }  
+                            }
+                            
+                            //console.log(schedule.schedule_id);
+                                
+                        }); 
+                    
+                    }else{
+                        $('#schedules').html(options);
+                    }
+                    //code_last.value = data.code_last[0].code;
                 }
 
-                
-                
-            }
-        }
+                if('control_citas' in data){
+                    console.log(data.control_citas[0].amount_usg_am );
+                    if(data.control_citas.length > 0){
+                        
+                        document.getElementById("alert-control-citas").style.display ='block';
 
-        
-        var url1 = base + '/agem/public/admin/agem/api/load/control/studies/'+fecha;
-        //var url1 = base + '/admin/agem/api/load/control/studies/'+fecha;
-        http.open('GET', url1, true);
-        http.setRequestHeader('X-CSRF-TOKEN', csrfToken);
-        http.send();
-        http.onreadystatechange = function(){
-            if(this.readyState == 4 && this.status == 200){
-                var data = this.responseText;
-                data = JSON.parse(data);
-                  
-                //console.log(data); 
-                if(data.length != 0){
-                     
-                    data.forEach( function(element){
-                        //console.log(element);
+
                         switch(exam){
-                            case '1':
-                                if(element.amount_rx_special_am == null){
-                                    control_am.value = 0;
-                                }else{
-                                    control_am.value = element.amount_rx_special_am;
-                                }
-
-                                if(element.amount_rx_special_pm == null){
-                                    control_pm.value = 0;
-                                }else{
-                                    control_pm.value = element.amount_rx_special_pm;
-                                }
-                            break;
-
                             case '2':
-                                if(element.amount_usg_am == null){
-                                    control_am.value = 0;
+                                document.getElementById("citas_agendadas_usg").style.display ='block';
+                                if(data.control_citas[0].amount_usg_am === null){
+                                    control_usg_am.value = 0;
                                 }else{
-                                    control_am.value = element.amount_usg_am;
+                                    control_usg_am.value = data.control_citas[0].amount_usg_am;
                                 }
 
-                                if(element.amount_usg_pm == null){
-                                    control_pm.value = 0;
+                                if(data.control_citas[0].amount_usg_pm === null){
+                                    control_usg_pm.value = 0;
                                 }else{
-                                    control_pm.value = element.amount_usg_pm;
+                                    control_usg_pm.value = data.control_citas[0].amount_usg_pm;
+                                }
+
+                                if(data.control_citas[0].amount_usg_doppler_am === null){
+                                    control_usg_doppler_am.value = 0;
+                                }else{
+                                    control_usg_doppler_am.value = data.control_citas[0].amount_usg_doppler_am;
+                                }
+
+                                if(data.control_citas[0].amount_usg_doppler_pm === null){
+                                    control_usg_doppler_pm.value = 0;
+                                }else{
+                                    control_usg_doppler_pm.value = data.control_citas[0].amount_usg_doppler_pm;
                                 }
                                 
                             break;
 
                             case '3':
-                                if(element.amount_mmo_am == null){
-                                    control_am.value = 0;
+                                document.getElementById("citas_agendadas_mmo").style.display ='block';
+                                if(data.control_citas[0].amount_mmo_am == null){
+                                    control_mmo_am.value = 0;
                                 }else{
-                                    control_am.value = element.amount_mmo_am;
+                                    control_mmo_am.value = data.control_citas[0].amount_mmo_am;
                                 }
 
-                                if(element.amount_mmo_pm == null){
-                                    control_pm.value = 0;
+                                if(data.control_citas[0].amount_mmo_pm == null){
+                                    control_mmo_pm.value = 0;
                                 }else{
-                                    control_pm.value = element.amount_mmo_pm;
+                                    control_mmo_pm.value = data.control_citas[0].amount_mmo_pm;
                                 }
                             break;
 
                             case '4':
-                                if(element.amount_dmo_am == null){
-                                    control_am.value = 0;
+                                document.getElementById("citas_agendadas_dmo").style.display ='block';
+                                if(data.control_citas[0].amount_dmo_am == null){
+                                    control_dmo_am.value = 0;
                                 }else{
-                                    control_am.value = element.amount_dmo_am;
+                                    control_dmo_am.value = data.control_citas[0].amount_dmo_am;
                                 }
 
-                                if(element.amount_dmo_pm == null){
-                                    control_pm.value = 0;
+                                if(data.control_citas[0].amount_dmo_pm == null){
+                                    control_dmo_pm.value = 0;
                                 }else{
-                                    control_pm.value = element.amount_dmo_pm;
+                                    control_dmo_pm.value = data.control_citas[0].amount_dmo_pm;
                                 }
                             break;
 
                         }
+
                         
-                    });                  
+                        
+                        
+                        
                     
+                    }
                     
+                    //code_last.value = data.code_last[0].code;
                 }
                 
+                
             }
-        }
-
-        
+        }      
 
         
     });

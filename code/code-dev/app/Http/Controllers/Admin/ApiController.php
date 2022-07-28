@@ -83,19 +83,61 @@ class ApiController extends Controller
                 $code_last = [];
             endif;
 
-            if(count($code_last) == 0):
-                $data = [
-                    'patient' => $patient,
-                    'exam' => $exam
-                ];
-            else:
-                
+            $today = Carbon::now()->format('Y-m-d');
 
-                $data = [
-                    'patient' => $patient,
-                    'code_last' => $code_last,
-                    'exam' => $exam
-                ];
+            if($exam == "1"):
+
+                $appoinment_last = Appointment::where('patient_id', $id_temp)
+                    ->whereDate('date', '>=', $today)
+                    ->where('area','0')
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+                $detalles = DetailAppointment::with(['service', 'study'])->get();
+            else:
+                $appoinment_last = Appointment::where('patient_id', $id_temp)
+                    ->whereDate('date', '>=', $today)
+                    ->where('area',$exam)
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+                $detalles = DetailAppointment::with(['service', 'study'])->get();
+            endif;       
+    
+
+            if(count($appoinment_last) == 0):    
+                if(count($code_last) == 0):
+                    
+                    $data = [
+                        'patient' => $patient,
+                        'exam' => $exam
+                    ];
+                else:
+                    $data = [
+                        'patient' => $patient,
+                        'code_last' => $code_last,
+                        'exam' => $exam
+                    ];
+                endif;  
+                
+            else:
+
+                if(count($code_last) == 0):
+                    $data = [
+                        'patient' => $patient,
+                        'appointment_last' => $appoinment_last,
+                        'detalles' => $detalles,
+                        'exam' => $exam
+                    ];
+                else:
+                    
+    
+                    $data = [
+                        'patient' => $patient,
+                        'code_last' => $code_last,
+                        'appointment_last' => $appoinment_last,
+                        'detalles' => $detalles,
+                        'exam' => $exam
+                    ];
+                endif;
             endif;
         endif;
 
@@ -144,6 +186,23 @@ class ApiController extends Controller
                 break;
 
             endswitch;
+            $today = Carbon::now()->format('Y-m-d');
+
+            if($exam == "1"):
+                $appoinment_last = Appointment::where('patient_id', $code)
+                    ->whereDate('date', '>=', $today)
+                    ->where('area','0')
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+                $detalles = DetailAppointment::with(['service', 'study'])->get();
+            else:
+                $appoinment_last = Appointment::where('patient_id', $code)
+                    ->whereDate('date', '>=', $today)
+                    ->where('area',$exam)
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+                $detalles = DetailAppointment::with(['service', 'study'])->get();
+            endif;       
 
             if(count($code_temp_last) > 0):
                 $code_last = $code_temp_last;
@@ -151,16 +210,32 @@ class ApiController extends Controller
                 $code_last = [];
             endif;
 
-            if(count($code_last) == 0):
-                $data = [
-                    
-                ];
-            else:
-                
 
-                $data = [
-                    'code_last' => $code_last
-                ];
+            if(count($appoinment_last) == 0):    
+                if(count($code_last) == 0):
+                    
+                    $data = [
+
+                    ];
+                else:
+                    $data = [
+                        'code_last' => $code_last
+                    ];
+                endif;  
+            else:
+                if(count($code_last) == 0):
+                    
+                    $data = [
+                        'appointment_last' => $appoinment_last,
+                        'detalles' => $detalles,
+                    ];
+                else:
+                    $data = [
+                        'appointment_last' => $appoinment_last,
+                        'detalles' => $detalles,
+                        'code_last' => $code_last,
+                    ];
+                endif;
             endif;
 
         
@@ -235,8 +310,14 @@ class ApiController extends Controller
                     ->where('area', $area)
                     ->groupBy('schedule_id')
                     ->get();       
+        $control_citas = ControlAppointment::where('date', $date)->get();
 
-        //return $data;
+        $data = [
+            'cant_citas' => $cant_citas,
+            'control_citas' => $control_citas
+        ];
+
+        return $data;
 
         //return $cant_citas;
         return response()->json($cant_citas);
