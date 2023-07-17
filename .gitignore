@@ -22,6 +22,6 @@ Homestead.json
 /.vagrant
 .phpunit.result.cache
 
-code/database/schemas
+/code/database/schemas/
 code/database/schemas/ibdatal/
-code/code-dev/storage/logs/laravel.log
+/code/code-dev/storage/logs/laravel.log
