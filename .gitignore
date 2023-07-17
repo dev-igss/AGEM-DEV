@@ -22,4 +22,4 @@ Homestead.json
 /.vagrant
 .phpunit.result.cache
 
-./database/schemas
+code/database/schemas
