@@ -29,6 +29,7 @@ Route::get('/citas_del_dia/acciones/{id}/comentario/{text}', 'PatientDayControll
 Route::get('/citas_del_dia/acciones/{id}/solicitud_reprogramacion', 'PatientDayController@getAppointmentReschedule')->name('materials'); 
 Route::get('/citas_del_dia/acciones/{id}/ausente_examen', 'PatientDayController@getAppointmentNot')->name('materials'); 
 Route::get('/citas_del_dia/acciones/{id}/agregar_estudio/{area}/{study}/{comment}', 'PatientDayController@getAppointmentAddExamen')->name('materials'); 
+Route::get('/citas_del_dia_lab', 'PatientDayController@getPatientDayRx')->name('patient_day');
 
 //Request Ajax
 Route::get('/agem/api/load/name/study/{id}', 'ApiController@getStudyName');
